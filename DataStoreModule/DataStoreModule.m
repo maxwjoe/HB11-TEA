@@ -41,8 +41,8 @@ classdef DataStoreModule < handle
 
         end
 
-        % delete : Deletes data from the module
-        function delete(obj, key)
+        % remove : Removes data from the module
+        function remove(obj, key)
 
             if ~ isfield(obj.m_data_store, key)
                 error('The key " %s " does not exist in the datastore', key);
