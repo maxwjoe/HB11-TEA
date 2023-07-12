@@ -9,22 +9,19 @@ classdef PhysicsModule < handle
         % Constructor 
         function obj = PhysicsModule(data_store_ref)
             obj.m_data_ref = data_store_ref;
+
+            % Declare data store variables
+            obj.m_data_ref.declare("TotalFuelBurn");
         end
     
-        % ComputeTotalElectricityGenerated : returns the total electricity
-        % generated (Dummy)
-        function total = ComputeTotalElectricityGenerated(obj)
-            
-            % Do some calculation
-            var1 = 3;
-            var2 = 5;
-    
-            total = var1 * var2;
-            
-            % Write result to global data store
-            obj.m_data_ref.declare("TotalElectricityGenerated");
-            obj.m_data_ref.set("TotalElectricityGenerated", total);
-    
+        % ComputeTotalFuelBurn : Example Function that computes burn (DUMMY)
+        function ComputeTotalFuelBurn(obj, rate, time)
+
+            % Perform calculation
+            total_burn = rate * time;
+
+            % Set the variable
+            obj.m_data_ref.set("TotalFuelBurn", total_burn);
         end
 
     end

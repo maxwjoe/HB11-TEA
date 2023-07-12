@@ -9,19 +9,17 @@ classdef EconomicsModule < handle
         % Constructor 
         function obj = EconomicsModule(data_store_ref)
             obj.m_data_ref = data_store_ref;
+
+            % declare data store variables
+            obj.m_data_ref.declare("TotalFuelCost");
         end
 
-        % ComputeTotalRevenue : calculates total revenue (Dummy)
-        function ComputeTotalRevenue(obj, elec_price)
-            
-            % Get electricity generated
-            elec_out = obj.m_data_ref.read("TotalElectricityGenerated");
-            total_revenue = elec_out * elec_price;
+        % ComputeTotalFuelCost : Computes total fuel cost (DUMMY)
+        function ComputeTotalFuelCost(obj, fuel_price)
+            total_burn = obj.m_data_ref.read("TotalFuelBurn");
 
-            % Write result to global store
-            obj.m_data_ref.declare("TotalRevenue");
-            obj.m_data_ref.set("TotalRevenue", total_revenue);
-            
+            total_cost = fuel_price * total_burn;
+            obj.m_data_ref.set("TotalFuelCost", total_cost);
         end
 
         % DemonstrateArrayCompute : Demonstrates arrays (Dummy)
