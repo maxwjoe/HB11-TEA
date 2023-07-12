@@ -8,6 +8,12 @@ classdef ControlModule < handle
 
         % Constructor
         function obj = ControlModule()
+
+            % HACKY : Add paths
+            oldpath = addpath("DataStoreModule/");
+            oldpath = addpath("EconomicsModule/");
+            oldpath = addpath("PhysicsModule/");
+
             obj.DS = DataStoreModule();
             obj.ECON = EconomicsModule(obj.DS);
             obj.PHYS = PhysicsModule(obj.DS);
