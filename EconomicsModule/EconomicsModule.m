@@ -19,7 +19,8 @@ classdef EconomicsModule < handle
             total_revenue = elec_out * elec_price;
 
             % Write result to global store
-            obj.m_data_ref.write("TotalRevenue", total_revenue);
+            obj.m_data_ref.declare("TotalRevenue");
+            obj.m_data_ref.set("TotalRevenue", total_revenue);
             
         end
 
@@ -27,7 +28,7 @@ classdef EconomicsModule < handle
         function DemonstrateArrayCompute(obj, arr_length)
             
             % This declares an array in the global store
-            obj.m_data_ref.write("DemoArray", []);
+            obj.m_data_ref.declare("DemoArray");
 
             for i = 1:arr_length
                 

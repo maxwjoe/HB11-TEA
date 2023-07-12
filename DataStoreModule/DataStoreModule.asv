@@ -16,10 +16,10 @@ classdef DataStoreModule < handle
         % declare : Declares a new variable in the data store
         function declare(obj, key)
 
-            % Enforce Uniqueness
-            obj.p_enforceUniqueField(key);
-            
-            % Add blank field to data store
+            if isfield(obj.m_data_store, key)
+                error('The field " %s " already exists in the data store.', key);
+            end
+
             obj.m_data_store.(key) = [];
 
         end
@@ -27,33 +27,32 @@ classdef DataStoreModule < handle
         % set : Sets a value to an existing variable in the data store
         function set(obj, key, value)
 
-            % Enforce Field Existence
-            obj.p_enforceExistField(key);
-            
-            % Set the update to the field
+            obj.p_checkValidField(key);
+
             obj.m_data_store.(key) = value;
 
         end
 
 
         % appendArray : Appends to an existing array in the datastore
-        % Note : method assumes target data is an array => DOES NOT CHECK
+        % Note : This assumes the data you append to IS AN ARRAY, it does
+        % not check!
         function appendArray(obj, key, value)
 
-            % Check that the field exists
-            obj.p_enforceExistField(key);
-            
-            % Append to the array
+            if ~(isfield(obj.m_data_store, key))
+                error('The field " %s " does not exist.', key);
+            end
+
             obj.m_data_store.(key)(end + 1) = value;
         end
 
         % read : Reads data from the module
         function ret_data = read(obj, key)
             
-            % Check that the field exists
-            obj.p_enforceExistField(key);
-            
-            % Read data from the field
+            if ~isfield(obj.m_data_store, key)
+                error('The key " %s " does not exist in the datastore', key);
+            end
+
             ret_data = obj.m_data_store.(key);
 
         end
@@ -61,10 +60,8 @@ classdef DataStoreModule < handle
         % remove : Removes data from the module
         function remove(obj, key)
 
-            % Check that the field exists
-            obj.p_enforceExistField(key);
-            
-            % Remove the field from the data store
+            obj.p_checkValidField(key);
+
             obj.m_data_store = rmfield(obj.m_data_store, key);
 
         end
@@ -80,28 +77,12 @@ classdef DataStoreModule < handle
 
     methods (Access = private)
 
-        % p_checkExistField : Returns true if a field exists, else false
-        function exist = p_checkExistField(obj, key)
+        % p_checkFieldExists : Returns true if a field exists, else false
+        function exist = p_checkFieldExists(obj, key)
             exist = isfield(obj.m_data_store, key);
         end
 
-        % p_enforceExistField : Throws an error if a field does not exist
-        function p_enforceExistField(obj, key)
-            
-            if ~obj.p_checkExistField(key)
-                error('The field " %s " does not exist in the data store.')
-            end
-
-        end
-
-        % p_enforceUnique : Throws an error if a field already exists
-        function p_enforceUniqueField(obj, key)
-            
-            if obj.p_checkExistField(key)
-                error('The field " %s " already exists in the data store.')
-            end
-
-        end
+        % p_handleInvalidField : Throws an error if a f
 
     end
 

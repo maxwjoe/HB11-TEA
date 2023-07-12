@@ -22,7 +22,8 @@ classdef PhysicsModule < handle
             total = var1 * var2;
             
             % Write result to global data store
-            obj.m_data_ref.write("TotalElectricityGenerated", total);
+            obj.m_data_ref.declare("TotalElectricityGenerated");
+            obj.m_data_ref.set("TotalElectricityGenerated", total);
     
         end
 
