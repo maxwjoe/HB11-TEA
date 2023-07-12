@@ -94,7 +94,7 @@ classdef DataStoreModule < handle
 
         end
 
-        % p_enforceUnique : Throws an error if a field already exists
+        % p_enforceUniqueField : Throws an error if a field already exists
         function p_enforceUniqueField(obj, key)
             
             if obj.p_checkExistField(key)
