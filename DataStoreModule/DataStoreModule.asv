@@ -4,7 +4,7 @@
 classdef DataStoreModule < handle
     
     % === Public Methods ===
-
+    
     methods (Access = public)
 
         % constructor
@@ -71,7 +71,6 @@ classdef DataStoreModule < handle
     end
 
     % === Private Methods ===
-
     methods (Access = private)
 
         % p_checkExistField : Returns true if a field exists, else false
@@ -100,7 +99,6 @@ classdef DataStoreModule < handle
     end
 
     % === Private Properties ===
-    
     properties (Access = private)
         
         m_data_store; % Structure to store data
