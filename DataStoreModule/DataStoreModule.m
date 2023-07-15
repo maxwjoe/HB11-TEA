@@ -1,13 +1,12 @@
 % File : DataStoreModule.m
-% Description : Defines the data store module class
-% Usage : This class should be instantiated ONCE in the control module and
-% passed down by reference to any module that requires access
+% Description : Class Definition for the Data Store
 
 classdef DataStoreModule < handle
-        
+    
     % === Public Methods ===
+
     methods (Access = public)
-        
+
         % constructor
         function obj = DataStoreModule()
             obj.m_data_store = struct();
@@ -69,11 +68,6 @@ classdef DataStoreModule < handle
 
         end
 
-        % getKeys : Returns all keys in the data store
-        function keys = getKeys(obj)
-            keys = fieldnames(obj.m_data_store);
-        end
-
     end
 
     % === Private Methods ===
@@ -106,9 +100,12 @@ classdef DataStoreModule < handle
     end
 
     % === Private Properties ===
+    
     properties (Access = private)
-        m_data_store;
+        
+        m_data_store; % Structure to store data
+
     end
+
+
 end
-
-
