@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<struct>
-    <Test>1</Test>
-    <Test>2</Test>
-    <Test>3</Test>
-    <Test>4</Test>
-    <Dog>This is the modified dog string</Dog>
-    <Cat>54</Cat>
-</struct>
