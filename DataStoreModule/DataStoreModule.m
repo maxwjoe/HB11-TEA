@@ -77,13 +77,29 @@ classdef DataStoreModule < handle
 
                 % Write into field
                 obj.set(key, data.(key));
-                
+
             end
 
         end
 
         % batchRead : Reads a set of keys and returns a struct with data
-        function batchRead(obj)
+        function data_out = batchRead(obj, keys)
+
+            % Check that keys is a vector
+            if ~isvector(keys)
+                error("batchRead() expects a vector.");
+            end
+
+            % Iterate over the keys and read data
+            data_out = struct();
+
+            for k = 1:numel(keys)
+                
+                key = keys(k);
+                data_out.(key) = obj.read(key);
+
+            end
+
         end
 
         % remove : Removes data from the module

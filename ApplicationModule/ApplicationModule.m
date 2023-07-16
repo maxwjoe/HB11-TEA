@@ -29,7 +29,11 @@ classdef ApplicationModule < handle
         end
 
         % PostOutputs : Posts output values from Application Layer to UI
-        function data = PostOutputs(obj)
+        function data = PostOutputs(obj, keys)
+            
+            % Perform a batch read operation on the data store and return
+            data = obj.DS.batchRead(keys);
+
         end
 
         % RunModel : Runs the Technoeconomic Model
