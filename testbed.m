@@ -3,7 +3,7 @@
 
 App = ApplicationModule();
 
-App.OpenState();
+App.OpenState("test.xml");
 App.PostOutputs(["Dog", "Cat"])
 
 

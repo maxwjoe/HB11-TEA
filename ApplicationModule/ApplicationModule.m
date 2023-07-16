@@ -57,13 +57,13 @@ classdef ApplicationModule < handle
         end
 
         % SaveState : Saves application state to file
-        function SaveState(obj)
-            obj.DS.dumpToFile("test.xml");
+        function SaveState(obj, filepath)
+            obj.DS.dumpToFile(filepath);
         end
 
         % OpenState : Loads application state from a file
-        function OpenState(obj)
-            obj.DS.loadFromFile("test.xml");
+        function OpenState(obj, filepath)
+            obj.DS.loadFromFile(filepath);
         end
 
         % ResetState : Restarts application
