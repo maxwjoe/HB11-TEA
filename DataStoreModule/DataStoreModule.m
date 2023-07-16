@@ -57,6 +57,51 @@ classdef DataStoreModule < handle
 
         end
 
+        % batchWrite : Unpacks and writes a structure to the data store
+        function batchWrite(obj, data)
+
+            % Check that data is a struct
+            if ~isstruct(data)
+                error("batchWrite() expects a struct.");
+            end
+
+            % Iterate over the struct and write to Data Store
+            keys = fieldnames(data);
+
+            for k = 1:numel(keys)
+                
+                key = keys{k};
+
+                % Declare Field
+                obj.declare(key);
+
+                % Write into field
+                obj.set(key, data.(key));
+
+            end
+
+        end
+
+        % batchRead : Reads a set of keys and returns a struct with data
+        function data_out = batchRead(obj, keys)
+
+            % Check that keys is a vector
+            if ~isvector(keys)
+                error("batchRead() expects a vector.");
+            end
+
+            % Iterate over the keys and read data
+            data_out = struct();
+
+            for k = 1:numel(keys)
+                
+                key = keys(k);
+                data_out.(key) = obj.read(key);
+
+            end
+
+        end
+
         % remove : Removes data from the module
         function remove(obj, key)
 
@@ -66,6 +111,16 @@ classdef DataStoreModule < handle
             % Remove the field from the data store
             obj.m_data_store = rmfield(obj.m_data_store, key);
 
+        end
+
+        % dumpToFile : Dumps the data store to a file
+        function dumpToFile(obj, filepath)
+            writestruct(obj.m_data_store, filepath);
+        end
+
+        % loadFromFile : Loads the data store from a file
+        function loadFromFile(obj, filepath)
+            obj.m_data_store = readstruct(filepath);
         end
 
     end
