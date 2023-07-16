@@ -12,11 +12,10 @@ classdef ApplicationModule < handle
 
             % Add Modules To Path
             addpath("DataStoreModule/");
-            addpath("ProcessModule/");
 
             % Instantiate Modules
             obj.DS = DataStoreModule();
-            obj.PROC = ProcessModule();
+            obj.P
 
         end
 
@@ -40,10 +39,6 @@ classdef ApplicationModule < handle
 
         % RunModel : Runs the Technoeconomic Model
         function RunModel(obj)
-
-            % Compute Electricity Generated
-            obj.ElectricityGenerated();
-
         end
 
         % ElectricityGenerated : Compute time series data for electricity vs time
@@ -53,23 +48,10 @@ classdef ApplicationModule < handle
             periods = obj.DS.read("in_periodsinmonths");
             
             elec_out_data = [];
-            time = 1:periods;
-            
-            % Compute for each period t
-            for t = time
-                output = obj.PROC.ComputeElectricityOut(mult_factor);
-                elec_out_data = [elec_out_data, output];
+
+            for i = 1:periods
+                elec_out_data = [elec_out_data, ]
             end
-            
-            % Package Data into 2D struct
-            elec_time_series = struct();
-            
-            elec_time_series.("period") = time;
-            elec_time_series.("output") = elec_out_data;
-            
-            % Write output to global data store
-            obj.DS.declare("out_electricitygenerated");
-            obj.DS.set("out_electricitygenerated", elec_time_series);
 
         end
 
@@ -111,7 +93,6 @@ classdef ApplicationModule < handle
     % === Private Properties ===
     properties (Access = private)
         DS;
-        PROC;
     end
 
 end
