@@ -113,6 +113,16 @@ classdef DataStoreModule < handle
 
         end
 
+        % dumpToFile : Dumps the data store to a file
+        function dumpToFile(obj, filepath)
+            writestruct(obj.m_data_store, filepath);
+        end
+
+        % loadFromFile : Loads the data store from a file
+        function loadFromFile(obj, filepath)
+            obj.m_data_store = readstruct(filepath);
+        end
+
     end
 
     % === Private Methods ===

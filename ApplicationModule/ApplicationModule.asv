@@ -21,12 +21,21 @@ classdef ApplicationModule < handle
         % --- Output Functions ---
 
         % LoadInputs : Load input values from UI into Data Layer
-        function LoadInputs(obj)
+        function LoadInputs(obj, data)
+            
+            % Perform a batch write operation to the data store
+            obj.DS.batchWrite(data);
+
         end
 
-        % p_PostOutputs : Posts output values from Application Layer to UI
-        function PostOutputs(obj)
+        % PostOutputs : Posts output values from Application Layer to UI
+        function data = PostOutputs(obj, keys)
+            
+            % Perform a batch read operation on the data store and return
+            data = obj.DS.batchRead(keys);
+
         end
+
         % RunModel : Runs the Technoeconomic Model
         function RunModel(obj)
         end
@@ -46,6 +55,18 @@ classdef ApplicationModule < handle
         % InvestmentSummary : Compute data for investment summary
         function InvestmentSummary(obj)
         end
+
+        % SaveState : Saves application state to file
+        function SaveState(obj)
+            obj.DS.dumpToFile("test.xml");
+        end
+
+        % OpenState : Loads application state from a file
+        function OpenState(obj)
+            obj.DS.loadFromFile("test.xml");
+        end
+
+        % ResetState : Restar
 
     end
 

@@ -56,6 +56,20 @@ classdef ApplicationModule < handle
         function InvestmentSummary(obj)
         end
 
+        % SaveState : Saves application state to file
+        function SaveState(obj)
+            obj.DS.dumpToFile("test.xml");
+        end
+
+        % OpenState : Loads application state from a file
+        function OpenState(obj)
+            obj.DS.loadFromFile("test.xml");
+        end
+
+        % ResetState : Restarts application
+        function ResetState(obj)
+        end
+
     end
 
     % === Private Methods ===

@@ -3,10 +3,8 @@
 
 App = ApplicationModule();
 
-dataIn = struct();
-dataIn.("Test") = 4;
-dataIn.("Dog") = 5;
+App.OpenState();
+App.PostOutputs(["Dog", "Cat"])
 
 
-App.LoadInputs(dataIn);
-App.PostOutputs(["Test"])
+
