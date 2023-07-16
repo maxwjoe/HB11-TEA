@@ -31,10 +31,21 @@ classdef ApplicationModule < handle
         end
 
         % PostOutputs : Posts output values from Application Layer to UI
-        function data = PostOutputs(obj, keys)
+        function data = PostOutputs(obj)
             
             % Perform a batch read operation on the data store and return
-            data = obj.DS.batchRead(keys);
+            output_keys = obj.DS.getKeys("out_");
+            data = obj.DS.batchRead(output_keys);
+
+        end
+
+        % PostInputs : Posts Input values from Application Layer to UI
+        % Note : This is used mostly when loading from a file
+        function data = PostInputs(obj)
+
+            % Perform a batch read operation on the data store and return
+            input_keys = obj.DS.getKeys("in_");
+            data = obj.DS.batchRead(input_keys);
 
         end
 
@@ -68,8 +79,7 @@ classdef ApplicationModule < handle
             elec_time_series.("output") = elec_out_data;
             
             % Write output to global data store
-            obj.DS.declare("out_electricitygenerated");
-            obj.DS.set("out_electricitygenerated", elec_time_series);
+            obj.DS.write("out_electricitygenerated", elec_time_series);
 
         end
 

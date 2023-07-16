@@ -34,6 +34,11 @@ classdef DataStoreModule < handle
 
         end
 
+        % write : Writes a key value pair into the datastore
+        % Note : Offers no protection against overwriting data
+        function write(obj, key, value)
+            obj.m_data_store.(key) = value;
+        end
 
         % appendArray : Appends to an existing array in the datastore
         % Note : method assumes target data is an array => DOES NOT CHECK
@@ -72,11 +77,7 @@ classdef DataStoreModule < handle
                 
                 key = keys{k};
 
-                % Declare Field
-                obj.declare(key);
-
-                % Write into field
-                obj.set(key, data.(key));
+                obj.write(key, data.(key));
 
             end
 
@@ -99,6 +100,22 @@ classdef DataStoreModule < handle
                 data_out.(key) = obj.read(key);
 
             end
+
+        end
+
+        % getKeys : Returns all the keys in the datastore (prefix match)
+        % Note : Pass "*" to get all keys in store
+        function keys = getKeys(obj, prefix)
+
+            all_keys = fieldnames(obj.m_data_store);
+            all_keys = string(all_keys);
+
+            if prefix == "*"
+                keys = all_keys;
+                return;
+            end
+
+            keys = all_keys(startsWith(all_keys, prefix));
 
         end
 
