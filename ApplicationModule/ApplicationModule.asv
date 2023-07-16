@@ -21,17 +21,12 @@ classdef ApplicationModule < handle
         % --- Output Functions ---
 
         % LoadInputs : Load input values from UI into Data Layer
-        function LoadInputs(obj, data)
-            
-            % Perform a batch write operation to the data store
-            obj.DS.batchWrite(data);
-
+        function LoadInputs(obj)
         end
 
-        % PostOutputs : Posts output values from Application Layer to UI
-        function data = PostOutputs(obj)
+        % p_PostOutputs : Posts output values from Application Layer to UI
+        function PostOutputs(obj)
         end
-
         % RunModel : Runs the Technoeconomic Model
         function RunModel(obj)
         end

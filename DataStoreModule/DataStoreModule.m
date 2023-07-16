@@ -57,6 +57,35 @@ classdef DataStoreModule < handle
 
         end
 
+        % batchWrite : Unpacks and writes a structure to the data store
+        function batchWrite(obj, data)
+
+            % Check that data is a struct
+            if ~isstruct(data)
+                error("batchWrite() expects a struct.");
+            end
+
+            % Iterate over the struct and write to Data Store
+            keys = fieldnames(data);
+
+            for k = 1:numel(keys)
+                
+                key = keys{k};
+
+                % Declare Field
+                obj.declare(key);
+
+                % Write into field
+                obj.set(key, data.(key));
+                
+            end
+
+        end
+
+        % batchRead : Reads a set of keys and returns a struct with data
+        function batchRead(obj)
+        end
+
         % remove : Removes data from the module
         function remove(obj, key)
 
