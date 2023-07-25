@@ -85,6 +85,13 @@ classdef ApplicationModule < handle
 
         % CapitalCosts : Compute data for capital costs
         function CapitalCosts(obj)
+            radius = obj.DS.read("in_radius");
+
+            total_cost_vs = obj.PROC.TotalCostVS(radius);
+            % add other total costs here; i.e. total_cost_construction
+            
+            total_capital_cost = total_cost_vs;
+            obj.DS.write("out_totalcapitalcost", total_capital_cost);
         end
 
         % OngoingCosts : Compute data for ongoing costs
