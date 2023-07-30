@@ -92,7 +92,7 @@ classdef ProcessModule < handle
             Inputs : Net reactor output (MWh), Duty Cycle
             Outputs : Net yearly reactor output (MWh)
         %}
-        function power_yearly = ReactorPowerNetYearlyMwh(power_net, duty_cycle)
+        function power_yearly = ReactorPowerNetYearly(power_net, duty_cycle)
             
             operating_hrs = p_ReactorOperatingHoursYear(duty_cycle);
             power_yearly = power_net * operating_hrs;
