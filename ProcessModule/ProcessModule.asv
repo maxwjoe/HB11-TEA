@@ -29,7 +29,7 @@ classdef ProcessModule < handle
 
         %{ 
             LaserEnergyInput : Input energy to laser
-            Inputs : Laser efficiency (%), Laser Energy output (MWh)
+            Inputs : Laser efficiency, Laser Energy output (MWh)
             Outputs : Laser Energy output in MWH 
         
         %}
@@ -54,7 +54,7 @@ classdef ProcessModule < handle
 
         %{ 
             ReactorPowerOutput : Reactor gross power output
-            Inputs : Target Output (MWh), Electricity gen efficiency (%)
+            Inputs : Target Output (MWh), Electricity generation efficiency
             Outputs : Gross power output (MWh)
         
         %}
