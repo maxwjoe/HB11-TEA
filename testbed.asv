@@ -75,14 +75,7 @@ coolant_pressure = 30000;
 
 % Personnel
 num_staff = 300;
-avg_hrly_wage = 55;
-
-% Vacuum System
-vacuum_radius = 10;
-vacuum_height = 6;
-vacuum_wall_thickness = 0.01;
-vacuum_mat_density = 8000;
-mass_flow_rate = 3594240;
+avg_h
 
 
 

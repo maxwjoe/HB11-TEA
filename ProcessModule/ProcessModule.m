@@ -99,10 +99,6 @@ classdef ProcessModule < handle
 
         end
 
-    end
-
-    % === Static Private Methods ===
-    methods (Static, Access = private)
         
         %{ 
             p_ReactorOperatingHoursYear : Reactor yearly hours in operation
@@ -114,6 +110,13 @@ classdef ProcessModule < handle
             operating_hrs = duty_cycle * 365 * 24;
 
         end
+
+    end
+
+    % === Static Private Methods ===
+    methods (Static, Access = private)
+        
+        
 
     end
 
