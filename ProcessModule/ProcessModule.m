@@ -88,28 +88,30 @@ classdef ProcessModule < handle
         end
 
         %{ 
+            p_ReactorOperatingHoursYear : Reactor yearly hours in operation
+            Inputs : Duty cycle 
+            Outputs : Yearly operating hours
+        %}
+        function operating_hrs = ReactorOperatingHoursYear(duty_cycle)
+
+            operating_hrs = duty_cycle * 365 * 24;
+
+        end
+
+        %{ 
             ReactorPowerNetYearly : Reactor yearly net power output
             Inputs : Net reactor output (MWh), Duty Cycle
             Outputs : Net yearly reactor output (MWh)
         %}
         function power_yearly = ReactorPowerNetYearly(power_net, duty_cycle)
             
-            operating_hrs = p_ReactorOperatingHoursYear(duty_cycle);
-            power_yearly = power_net * operating_hrs;
+            op_hrs = ProcessModule.ReactorOperatingHoursYear(duty_cycle);
+            power_yearly = power_net * op_hrs;
 
         end
+
 
         
-        %{ 
-            p_ReactorOperatingHoursYear : Reactor yearly hours in operation
-            Inputs : Duty cycle 
-            Outputs : Yearly operating hours
-        %}
-        function operating_hrs = p_ReactorOperatingHoursYear(duty_cycle)
-
-            operating_hrs = duty_cycle * 365 * 24;
-
-        end
 
     end
 
