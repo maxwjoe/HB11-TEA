@@ -11,6 +11,11 @@ classdef EconomicsModule < handle
     % === Static Public Methods ===
     methods (Static, Access = public)
 
+        % --- Laser ---
+        % None
+
+        % --- Power ---
+
         %{ 
             ReactorPowerRevenue : Revenue from power generation
             Inputs : Net power output (MWh), Electricity rate ($/MWh)
@@ -32,7 +37,14 @@ classdef EconomicsModule < handle
             cost_hourly = power_in * elec_rate;
 
         end
-
+        
+        % --- Manufacturing ---
+        % --- Fuel Delivery/Storage ---
+        % --- Maintenance ---
+        % --- Construction ---
+        % --- Utilities ---
+        % --- Personel ---
+        % --- Vacuum System ---
 
     end
 

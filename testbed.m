@@ -104,8 +104,7 @@ reactor_power_revenue = ECON.ReactorPowerRevenue(net_reactor_power_output, elec_
 reactor_cost_hrly = ECON.ReactorPowerCostHourly(total_reactor_power_consumption, elec_rate);
 reactor_yearly_net_output = PROC.ReactorPowerNetYearly(net_reactor_power_output, duty_cycle);
 
-
-
+% * Manufacturing
 
 
 % --- Display Outputs ---
