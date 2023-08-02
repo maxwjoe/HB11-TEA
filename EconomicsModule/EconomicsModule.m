@@ -11,40 +11,18 @@ classdef EconomicsModule < handle
     % === Static Public Methods ===
     methods (Static, Access = public)
 
-        % --- Laser ---
-        % None
-
-        % --- Power ---
+        % --- Power Generation ---
 
         %{ 
-            ReactorPowerRevenue : Revenue from power generation
-            Inputs : Net power output (MWh), Electricity rate ($/MWh)
-            Outputs : Reactor revenue
+            TotalEnergyConsumptionCost : [TODO]
+            Inputs : 
+            Outputs : 
         %}
-        function revenue = ReactorPowerRevenue(power_net, elec_rate)
-            
-            revenue = power_net * elec_rate;
+        function cost = TotalEnergyConsumptionCost(reactor_in, elec_rate)
+
+            cost = reactor_in * elec_rate;
 
         end
-
-        %{ 
-            ReactorPowerCostHourly : Reactor power cost per hour
-            Inputs : power_in (MWh), electricity rate ($/MWh)
-            Outputs : Reactor hourly power cost
-        %}
-        function cost_hourly = ReactorPowerCostHourly(power_in, elec_rate)
-        
-            cost_hourly = power_in * elec_rate;
-
-        end
-        
-        % --- Manufacturing ---
-        % --- Fuel Delivery/Storage ---
-        % --- Maintenance ---
-        % --- Construction ---
-        % --- Utilities ---
-        % --- Personel ---
-        % --- Vacuum System ---
 
     end
 

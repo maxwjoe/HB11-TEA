@@ -19,13 +19,13 @@ classdef ProcessModule < handle
 
         %{ 
             LaserEnergyOutput : Output energy of laser
-            Inputs : Total laser power per pulse (MJ), Repetition Rate (Hz)
+            Inputs : Total laser energy per pulse (MJ), Repetition Rate (Hz)
             Outputs : Laser Energy output in MWh 
         
         %}
-        function laser_out = LaserEnergyOutput(pulse_power, rep_rate)
+        function laser_out = LaserEnergyOutput(pulse_energy, rep_rate)
             
-            laser_out = pulse_power * rep_rate;
+            laser_out = pulse_energy * rep_rate;
      
         end
 
@@ -37,91 +37,98 @@ classdef ProcessModule < handle
         %}
         function laser_in = LaserEnergyInput(laser_eff, laser_out)
 
-            laser_in = (laser_out / laser_eff) * 100.0;
+            laser_in = (laser_out / laser_eff);
 
         end
 
+        % --- Reactor ---
         
-        % --- Power ---
-
         %{ 
-            ReactorTargetOutput : Target output of reaction
+            ReactionOutput : Output of the reaction
             Inputs : Target Gain, Laser energy output (MWh)
             Outputs : Target output (MWh)
         
         %}
-        function target_out = ReactorEnergyTargetOutput(tgt_gain, laser_out)
-        
+        function target_out = ReactorEnergyTargetOutput(tgt_gain, laser_out, has_hohlraum, hohlraum_gain)
+           
+
             target_out = tgt_gain * laser_out;
+
+            if has_hohlraum
+                target_out = target_out * hohlraum_gain;
+            end
         
         end
 
         %{ 
-            ReactorPowerOutput : Reactor gross power output
-            Inputs : Target Output (MWh), Electricity gen efficiency (%)
-            Outputs : Gross power output (MWh)
-        
+            RealisedReactorGain : [TODO]
+            Inputs : 
+            Outputs : 
         %}
-        function power_out = ReactorPowerOutput(tgt_out, elec_gen_eff)
-
-            power_out = (tgt_out * elec_gen_eff) / 100.0;
-
+        function gain = RealisedReactorGain(react_out, elec_gen_eff, laser_input)
+        
+            gain = (react_out * elec_gen_eff) / laser_input;
+        
         end
 
-        %{ 
-            ReactorPowerInput : Reactor total power input
-            Inputs : Laser energy input (MWh), Cooling system power (MWh)
-            Outputs : Reactor power input (MWh)
         
+        % --- Power Generation ---
+        
+        %{ 
+            GrossPowerOutput : [TODO]
+            Inputs : 
+            Outputs : 
         %}
-        function power_in = ReactorPowerInput(laser_in, cool_power)
+        function gross = GrossPowerOutput(react_out, elec_gen_eff)
             
-            power_in = laser_in + cool_power;
-
+            gross = react_out * elec_gen_eff;
+        
         end
 
         %{ 
-            ReactorPowerNet : Net reactor power output
-            Inputs : Gross power output (MWh), Reactor power input (MWh)
-            Outputs : Net reactor output (MWh)
+            TotalReactorEnergyConsumption : [TODO]
+            Inputs : 
+            Outputs : 
         %}
-        function power_net = ReactorPowerNet(power_out, power_in)
-
-            power_net = power_out - power_in;
-
-        end
-
-        %{ 
-            p_ReactorOperatingHoursYear : Reactor yearly hours in operation
-            Inputs : Duty cycle 
-            Outputs : Yearly operating hours
-        %}
-        function operating_hrs = ReactorOperatingHoursYear(duty_cycle)
-
-            operating_hrs = duty_cycle * 365 * 24;
-
-        end
-
-        %{ 
-            ReactorPowerNetYearly : Reactor yearly net power output
-            Inputs : Net reactor output (MWh), Duty Cycle
-            Outputs : Net yearly reactor output (MWh)
-        %}
-        function power_yearly = ReactorPowerNetYearly(power_net, duty_cycle)
+        function energy_in = TotalReactorEnergyConsumption(laser_in, cool_sys_in, vacuum_in)
             
-            op_hrs = ProcessModule.ReactorOperatingHoursYear(duty_cycle);
-            power_yearly = power_net * op_hrs;
+            energy_in = laser_in + cool_sys_in + vacuum_in;
+        
+        end
+
+        %{ 
+            NetPowerOutput : [TODO]
+            Inputs : 
+            Outputs : 
+        %}
+        function net_power = NetPowerOutput(gross_output, react_in)
+        
+            net_power = gross_output - react_in;
+        
+        end
+
+        %{ 
+            HoursInOperationPerYear : [TODO]
+            Inputs : 
+            Outputs : 
+        %}
+        function hours = HoursInOperationPerYear(duty_cycle)
+
+            hours = duty_cycle * 24 * 365;
 
         end
 
-        % --- Manufacturing ---
-        % --- Fuel Delivery/Storage ---
-        % --- Maintenance ---
-        % --- Construction ---
-        % --- Utilities ---
-        % --- Personel ---
-        % --- Vacuum System ---
-
+        %{ 
+            YearlyNetPowerOutput : [TODO]
+            Inputs : 
+            Outputs : 
+        %}
+        function yearly_net_power = YearlyNetPowerOutput(net_power, hours_in_op)
+        
+            yearly_net_power = net_power * hours_in_op;
+        
+        end
+    
 
         
 
