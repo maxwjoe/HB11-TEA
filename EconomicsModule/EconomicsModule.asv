@@ -87,9 +87,7 @@ classdef EconomicsModule < handle
             Outputs : 
         %}
         function total_cost = TotalFuelManufacturingCostsOngoing(manu_overhead, production_target_yrly, tgt_cost)
-               
-            total_cost = manu_overhead + (production_target_yrly * tgt_cost);
-
+    
         end
 
 

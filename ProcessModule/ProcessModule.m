@@ -130,6 +130,32 @@ classdef ProcessModule < handle
         end
     
 
+        % --- Fuel Manufacturing Costs ---
+
+        %{ 
+            FuelTargetProductionPerYear : [TODO]
+            Inputs : 
+            Outputs : 
+        %}
+
+        function target_prod = FuelTargetProductionPerYear(required_tgts_yr, failure_rate)
+            
+            target_prod = required_tgts_yr / (1 - failure_rate);
+        
+        end
+
+        %{ 
+            RequiredTargetsPerYear : [TODO]
+            Inputs : 
+            Outputs : 
+        %}
+        
+        function required_tgts = RequiredTargetsPerYear(rep_rate, duty_cycle)
+        
+            required_tgts = rep_rate * duty_cycle * 365 * 24 * 3600;
+
+        end
+
         
 
     end
