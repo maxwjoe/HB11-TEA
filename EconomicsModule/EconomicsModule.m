@@ -92,6 +92,21 @@ classdef EconomicsModule < handle
 
         end
 
+        % --- Fuel Storage / Delivery ---
+
+        %{ 
+            TotalCostOfFuelDeliveryAndStorage : [TODO]
+            Inputs : 
+            Outputs : 
+        %}
+        function total_cost = TotalCostOfFuelDeliveryAndStorage(total_cost_of_fuel_storage, total_cost_of_fuel_delivery_robot)
+
+            total_cost = total_cost_of_fuel_storage + total_cost_of_fuel_delivery_robot;
+
+        end
+
+        
+
 
 
     end

@@ -44,6 +44,16 @@ total_cost_manu_facilities = 25000000;
 manu_overhead_costs = 3000000;
 final_assem_cost_per_target = 0.03;
 
+% * Fuel Storage / Delivery *
+storage_cost = 1;
+storage_footprint_per_target = 0.009;
+required_redundancy = 90;
+stack_height = 50;
+cost_of_fuel_delivery_robot = 250000;
+total_cost_of_fuel_storage = 923.79;
+
+
+
 
 % === Model ===
 
@@ -73,6 +83,10 @@ total_cost_per_target = ECON.TotalCostPerTarget(total_cost_per_pellet, total_cos
 total_fuel_manu_cost_upfront = ECON.TotalFuelManufacturingCostsUpfront(total_cost_fuel_dev, total_cost_manu_facilities);
 total_fuel_manu_cost_ongoing = ECON.TotalFuelManufacturingCostsOngoing(manu_overhead_costs, fuel_target_production_per_year, total_cost_per_target);
 
+% * Fuel Storage / Delivery *
+total_cost_of_fuel_delivery_and_storage = ECON.TotalCostOfFuelDeliveryAndStorage(total_cost_of_fuel_storage, cost_of_fuel_delivery_robot);
+number_of_targets_required_in_storage = PROC.NumberOfTargetsRequiredInStorage(repetition_rate, duty_cycle, required_redundancy);
+
 % === Display Outputs ===
 
 % * Laser *
@@ -100,4 +114,8 @@ sprintf("Total cost per cap coil and focus cone = %f\n", total_cost_per_capaciti
 sprintf("Total cost per target = %f\n", total_cost_per_target);
 sprintf("Total fuel manufacturing cost upfront = %f\n",total_fuel_manu_cost_upfront);
 sprintf("Total fuel manufacturing cost ongoing = %f\n",total_fuel_manu_cost_ongoing);
+
+% * Fuel Storage / Delivery *
+sprintf("Total Cost of fuel delivery and storage = %f\n",total_cost_of_fuel_delivery_and_storage);
+sprintf("Number of targets required in storage = %f\n",number_of_targets_required_in_storage);
 

@@ -87,8 +87,24 @@ classdef EconomicsModule < handle
             Outputs : 
         %}
         function total_cost = TotalFuelManufacturingCostsOngoing(manu_overhead, production_target_yrly, tgt_cost)
-    
+               
+            total_cost = manu_overhead + (production_target_yrly * tgt_cost);
+
         end
+
+        % --- Fuel Storage / Delivery ---
+
+        %{ 
+            TotalCostOfFuelDeliveryAndStorage : [TODO]
+            Inputs : 
+            Outputs : 
+        %}
+        function total_cost = TotalCostOfFuelDeliveryAndStorage(total_cost_of_fuel_storage, total_cost_of_fuel_delivery_robot)
+
+            total_cost = total_cost_of_fuel_storage + total_cost_of_fuel_delivery_robot;
+
+        end
+        
 
 
 

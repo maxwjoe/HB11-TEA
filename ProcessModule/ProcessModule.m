@@ -157,6 +157,19 @@ classdef ProcessModule < handle
         end
 
         
+        % --- Fuel Storage / Delivery ---
+
+        %{ 
+            NumberOfTargetsRequiredInStorage : [TODO]
+            Inputs : 
+            Outputs : 
+        %}
+        function targets = NumberOfTargetsRequiredInStorage(repetition_rate, duty_cycle, required_redundancy)
+        
+            targets = repetition_rate * (duty_cycle * 24 * 3600) * required_redundancy;
+        end
+
+        
 
     end
 
