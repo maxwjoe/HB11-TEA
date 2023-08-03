@@ -108,9 +108,8 @@ cooling_system_energy_consumption = PROC.CoolingSystemEnergyConsumption(coolant_
 total_coolant_cost = ECON.TotalCoolantCost(coolant_volume, coolant_density, coolant_cost);
 
 % * Maintenance Cost * 
-% yearly_regular_maintenance_cost = ECON.YearlyRegularMaintenanceCosts(cost_of_maintenance_per_kwh, yearly_net_power_output);
-% lifetime_maintenance_cost = ECON.LifetimeMaintenanceCost(number_of_years_in_service, turbine_replacement_interval, turbine_generators_replacement_cost, diode_replacement_cost, laser_energy_input, diode_replacement_interval, repetition_rate, lifetime_wall_replacement_cost, , , , );
-% 
+yearly_regular_maintenance_cost = ECON.YearlyRegularMaintenanceCosts(cost_of_maintenance_per_kwh, yearly_net_power_output);
+lifetime_maintenance_cost = ECON.LifetimeMaintenanceCost(number_of_years_in_service, turbine_replacement_interval, turbine_generators_replacement_cost, diode_replacement_cost, laser_energy_input, diode_replacement_interval, repetition_rate, lifetime_wall_replacement_cost, total_coolant_cost, coolant_replacement_interval, yearly_regular_maintenance_cost);
 
 % === Display Outputs ===
 
@@ -145,10 +144,12 @@ sprintf("Total Cost of fuel delivery and storage = %f\n",total_cost_of_fuel_deli
 sprintf("Number of targets required in storage = %f\n",number_of_targets_required_in_storage);
 
 % * Cooling System *
-sprintf("Mixed mean coolant temperature rise = %f\n",mixed_mean_coolant_temperature_rise)
-sprintf("Coolant flow rate = %f\n",coolant_flow_rate)
-sprintf("Cooling system energy consumption = %f\n",cooling_system_energy_consumption)
-sprintf("Total coolant cost = %f\n",total_coolant_cost)
+sprintf("Mixed mean coolant temperature rise = %f\n",mixed_mean_coolant_temperature_rise);
+sprintf("Coolant flow rate = %f\n",coolant_flow_rate);
+sprintf("Cooling system energy consumption = %f\n",cooling_system_energy_consumption);
+sprintf("Total coolant cost = %f\n",total_coolant_cost);
 
 % * Maintenance Cost * 
+sprintf("Yearly regular maintenance cost = %f\n", yearly_regular_maintenance_cost)
+sprintf("Lifetime maintenance cost = %f\n", lifetime_maintenance_cost)
 

@@ -146,7 +146,7 @@ classdef EconomicsModule < handle
             coolant = 0;
 
             if coolant_replacement_interval ~= 0
-                coolant = total_coolant_cost * floor(number_of_years_in_service, coolant_replacement_interval);
+                coolant = total_coolant_cost * floor(number_of_years_in_service * coolant_replacement_interval);
             end
 
             % Regular Costs
