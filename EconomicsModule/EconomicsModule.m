@@ -105,8 +105,69 @@ classdef EconomicsModule < handle
 
         end
 
-        
+        % --- Cooling System ---
 
+        %{ 
+            TotalCoolantCost : [TODO]
+            Inputs : 
+            Outputs : 
+        %}
+        function cost = TotalCoolantCost(coolant_volume, coolant_density, coolant_cost)
+            cost = coolant_volume * coolant_density * coolant_cost;
+        end
+
+        % --- Maintenance Cost ---
+
+        %{ 
+            LifetimeMaintenanceCost : [TODO]
+            Inputs : 
+            Outputs : 
+        %}
+        function cost = LifetimeMaintenanceCost(number_of_years_in_service, turbine_replacement_interval, turbine_generator_replacement_cost, diode_replacement_cost, laser_energy_input, diode_replacement_interval, repetition_rate, lifetime_wall_replacement_cost, total_coolant_cost, coolant_replacement_interval, yearly_regular_maintenance_cost)
+            
+            % Turbine Costs
+            turbine = 0;
+
+            if turbine_replacement_interval ~= 0
+                turbine = floor(number_of_years_in_service / turbine_replacement_interval) * turbine_generator_replacement_cost;
+            end
+            
+            % Diode Costs
+            diode = 0;
+
+            if diode_replacement_interval ~= 0
+                diode = diode_replacement_cost * (laser_energy_input / 3600) * repetition_rate * floor(number_of_years_in_service / diode_replacement_interval) ;
+            end
+            
+            % Wall Costs
+            wall = lifetime_wall_replacement_cost;
+
+            % Coolant Costs
+            coolant = 0;
+
+            if coolant_replacement_interval ~= 0
+                coolant = total_coolant_cost * floor(number_of_years_in_service, coolant_replacement_interval);
+            end
+
+            % Regular Costs
+            reg_costs = yearly_regular_maintenance_cost * number_of_years_in_service;
+
+            % Total
+            cost = turbine + diode + wall + coolant + reg_costs;  
+
+        end
+
+        
+        %{ 
+            YearlyRegularMaintenanceCosts : [TODO]
+            Inputs : 
+            Outputs : 
+        %}
+        function cost = YearlyRegularMaintenanceCosts(cost_of_maintenance_per_kwh, yearly_net_power_output)
+            
+            cost = cost_of_maintenance_per_kwh * 1000 * yearly_net_power_output;
+
+        end
 
 
     end

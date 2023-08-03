@@ -156,7 +156,7 @@ classdef ProcessModule < handle
 
         end
 
-        
+
         % --- Fuel Storage / Delivery ---
 
         %{ 
@@ -168,7 +168,41 @@ classdef ProcessModule < handle
         
             targets = repetition_rate * (duty_cycle * 24 * 3600) * required_redundancy;
         end
+        
+        % --- Cooling System ---
 
+        %{ 
+            MixedMeanCoolantTemperatureRise : [TODO]
+            Inputs : 
+            Outputs : 
+        %}
+        function rise = MixedMeanCoolantTemperatureRise(reaction_output)
+
+            rise = reaction_output * 10^6 * (10/1000 + 12/1000 + 17/1000 + 25/1000)/4;
+
+        end
+
+        %{ 
+            CoolingSystemEnergyConsumption : [TODO]
+            Inputs : 
+            Outputs : 
+        %}
+        function energy_in = CoolingSystemEnergyConsumption(coolant_flow_rate, cooling_system_pressure)
+        
+                energy_in = coolant_flow_rate * cooling_system_pressure * 3600/1000000;
+
+        end
+
+        %{ 
+            CoolantFlowRate : [TODO]
+            Inputs : 
+            Outputs : 
+        %}
+        function flow_rate = CoolantFlowRate(reaction_output, mixed_mean_coolant_temperature_rise, specific_heat_of_coolant)
+
+            flow_rate = reaction_output * 10^6 / mixed_mean_coolant_temperature_rise / specific_heat_of_coolant;
+
+        end
         
 
     end

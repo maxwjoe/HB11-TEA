@@ -23,7 +23,6 @@ electricity_generator_efficiency = 0.4;
 % * Power Generation *
 turbine_plant_equipment = 186700000;
 elec_rate = 72;
-cooling_system_energy_consumption = 20.149;
 vacuum_system_power_usage = 0.13;
 
 % * Fuel Manufacturing Costs *
@@ -52,7 +51,22 @@ stack_height = 50;
 cost_of_fuel_delivery_robot = 250000;
 total_cost_of_fuel_storage = 923.79;
 
+% * Cooling System *
+specific_heat_of_coolant = 335;
+coolant_cost = 1000;
+coolant_volume = 1000;
+coolant_density = 6.095;
+cooling_system_pressure = 3000;
+coolant_replacement_interval = 4;
 
+% * Maintenance Cost *
+diode_replacement_cost = 1000000;
+turbine_generators_replacement_cost = 75000000;
+lifetime_wall_replacement_cost = 20000000;
+number_of_years_in_service = 26;
+cost_of_maintenance_per_kwh = 0.00588;
+turbine_replacement_interval = 25.01;
+diode_replacement_interval = 7;
 
 
 % === Model ===
@@ -84,7 +98,19 @@ total_fuel_manu_cost_upfront = ECON.TotalFuelManufacturingCostsUpfront(total_cos
 total_fuel_manu_cost_ongoing = ECON.TotalFuelManufacturingCostsOngoing(manu_overhead_costs, fuel_target_production_per_year, total_cost_per_target);
 
 % * Fuel Storage / Delivery *
-total_cost_of_fuel_delivery_and_storage = ECON.TotalCostOfFuelDeliveryAndStorage(total_cost_of_fuel_storage, );
+total_cost_of_fuel_delivery_and_storage = ECON.TotalCostOfFuelDeliveryAndStorage(total_cost_of_fuel_storage, cost_of_fuel_delivery_robot);
+number_of_targets_required_in_storage = PROC.NumberOfTargetsRequiredInStorage(repetition_rate, duty_cycle, required_redundancy);
+
+% * Cooling System *
+mixed_mean_coolant_temperature_rise = PROC.MixedMeanCoolantTemperatureRise(reaction_output);
+coolant_flow_rate = PROC.CoolantFlowRate(reaction_output, mixed_mean_coolant_temperature_rise, specific_heat_of_coolant);
+cooling_system_energy_consumption = PROC.CoolingSystemEnergyConsumption(coolant_flow_rate, cooling_system_pressure);
+total_coolant_cost = ECON.TotalCoolantCost(coolant_volume, coolant_density, coolant_cost);
+
+% * Maintenance Cost * 
+yearly_regular_maintenance_cost = ECON.YearlyRegularMaintenanceCosts(cost_of_maintenance_per_kwh, yearly_net_power_output);
+lifetime_maintenance_cost = ECON.LifetimeMaintenanceCost(number_of_years_in_service, turbine_replacement_interval, turbine_generators_replacement_cost, diode_replacement_cost, laser_energy_input, diode_replacement_interval, repetition_rate, lifetime_wall_replacement_cost, , , , );
+
 
 % === Display Outputs ===
 
@@ -115,5 +141,13 @@ sprintf("Total fuel manufacturing cost upfront = %f\n",total_fuel_manu_cost_upfr
 sprintf("Total fuel manufacturing cost ongoing = %f\n",total_fuel_manu_cost_ongoing);
 
 % * Fuel Storage / Delivery *
+sprintf("Total Cost of fuel delivery and storage = %f\n",total_cost_of_fuel_delivery_and_storage);
+sprintf("Number of targets required in storage = %f\n",number_of_targets_required_in_storage);
 
+% * Cooling System *
+sprintf("Mixed mean coolant temperature rise = %f\n",total_cost_of_fuel_delivery_and_storage);
+sprintf("Number of targets required in storage = %f\n",number_of_targets_required_in_storage);
+
+
+% * Maintenance Cost * 
 
