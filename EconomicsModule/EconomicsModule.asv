@@ -125,35 +125,7 @@ classdef EconomicsModule < handle
         %}
         function cost = LifetimeMaintenanceCost(number_of_years_in_service, turbine_replacement_interval, turbine_generator_replacement_cost, diode_replacement_cost, laser_energy_input, diode_replacement_interval, repetition_rate, lifetime_wall_replacement_cost, total_coolant_cost, coolant_replacement_interval, yearly_regular_maintenance_cost)
             
-            % Turbine Costs
-            turbine = 0;
-
-            if turbine_replacement_interval ~= 0
-                turbine = floor(number_of_years_in_service / turbine_replacement_interval) * turbine_generator_replacement_cost;
-            end
-            
-            % Diode Costs
-            diode = 0;
-
-            if diode_replacement_interval ~= 0
-                diode = diode_replacement_cost * (laser_energy_input / 3600) * repetition_rate * floor(number_of_years_in_service / diode_replacement_interval) ;
-            end
-            
-            % Wall Costs
-            wall = lifetime_wall_replacement_cost;
-
-            % Coolant Costs
-            coolant = 0;
-
-            if coolant_replacement_interval ~= 0
-                coolant = total_coolant_cost * floor(number_of_years_in_service * coolant_replacement_interval);
-            end
-
-            % Regular Costs
-            reg_costs = yearly_regular_maintenance_cost * number_of_years_in_service;
-
-            % Total
-            cost = turbine + diode + wall + coolant + reg_costs;  
+            cost = floor(number_of_years_in_service/turbine_replacement_interval)*turbine_generator_replacement_cost + diode_replacement_cost * (laser_energy_input / 3600) * repetition_rate * floor(number_of_years_in_service / diode_replacement_interval) +  
 
         end
 
@@ -189,6 +161,57 @@ classdef EconomicsModule < handle
         %}
         function cost = TotalConstructionCost(indirect_construction_costs, direct_construction_costs)
             
+            cost = indirect_construction_costs + direct_construction_costs;
+
+        end
+
+        
+        %{ 
+            DecomissioningCost : [TODO]
+            Inputs : 
+            Outputs : 
+        %}
+        function cost = DecomissioningCost(decomissioning_cost_coefficient, direct_construction_cost)
+
+            cost = decomissioning_cost_coefficient * direct_construction_cost;
+
+        end
+        
+        % --- Personnel ---
+        
+        %{ 
+            HourlyPersonnelCost : [TODO]
+            Inputs : 
+            Outputs : 
+        %}
+        function cost = HourlyPersonnelCost(number_of_staff, average_hourly_wage)
+
+            cost = number_of_staff * average_hourly_wage;
+
+        end
+
+        %{ 
+            YearlyPersonnelCost : [TODO]
+            Inputs : 
+            Outputs : 
+        %}
+        function cost = YearlyPersonnelCost(hourly_personnel_cost)
+
+            cost = hourly_personnel_cost * 7.6*7*52.18;
+
+        end
+
+        % --- Vacuum System ---
+
+        %{ 
+            TotalCostOfVacuumSystem : [TODO]
+            Inputs : 
+            Outputs : 
+        %}
+        function cost = TotalCostOfVacuumSystem(mass_of_vacuum_vessel, shielding_material_costs_for_vacuum_vessel, mass_flow_rate)
+        
+            cost = 90.69 * mass_of_vacuum_vessel + shielding_material_costs_for_vacuum_vessel + 13.04 * mass_flow_rate;
+        
         end
 
 
