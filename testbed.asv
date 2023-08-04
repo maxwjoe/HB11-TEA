@@ -79,7 +79,19 @@ laser_construction_cost = 38;
 miscellaneous_buildings_cost = 148;
 inflation_coefficient = 0.045;
 indirect_construction_cost = 200;
-d
+decommissioning_cost_coefficient = 0.25;
+
+% * Personnel *
+number_of_staff = 300;
+average_hourly_wage = 55;
+
+% * Vacuum System *
+shielding_material_costs_for_vacuum_vessel = 0;
+radius_of_vacuum_vessel = 10;
+wall_thickness_of_vacuum_vessel = 0.1;
+density_of_vacuum_vessel_material = 8000;
+vacuum_system_power_usage = 0.13;
+mass_flow_rate = 3594240;
 
 
 % === Model ===
@@ -125,7 +137,16 @@ yearly_regular_maintenance_cost = ECON.YearlyRegularMaintenanceCosts(cost_of_mai
 lifetime_maintenance_cost = ECON.LifetimeMaintenanceCost(number_of_years_in_service, turbine_replacement_interval, turbine_generators_replacement_cost, diode_replacement_cost, laser_energy_input, diode_replacement_interval, repetition_rate, lifetime_wall_replacement_cost, total_coolant_cost, coolant_replacement_interval, yearly_regular_maintenance_cost);
 
 % * Construction Cost *
+direct_construction_cost = ECON.DirectConstructionCost(land_cost, reactor_building_cost, turbine_building_cost, cooling_tower_system_cost, power_supply_and_energy_storage_cost, ventilation_stack_cost, miscellaneous_buildings_cost, laser_construction_cost);
+total_construction_cost = ECON.TotalConstructionCost(indirect_construction_cost, direct_construction_cost);
+decommissioning_cost = ECON.DecomissioningCost(decommissioning_cost_coefficient, direct_construction_cost);
 
+% * Personnel *
+hourly_personnel_cost = ECON.HourlyPersonnelCost(number_of_staff, average_hourly_wage);
+yearly_personnel_cost = ECON.YearlyPersonnelCost(hourly_personnel_cost);
+
+% * Vacuum System *
+mass
 
 % === Display Outputs ===
 
@@ -166,8 +187,18 @@ sprintf("Hours In Operation Per Year = %f\n", hours_in_operation_per_year);
 sprintf("Yearly Net Power Output = %f\n", yearly_net_power_output);
 
 % * Maintenance Cost * 
-sprintf("Yearly regular maintenance cost = %f\n", yearly_regular_maintenance_cost)
-sprintf("Lifetime maintenance cost = %f\n", lifetime_maintenance_cost)
+sprintf("Yearly regular maintenance cost = %f\n", yearly_regular_maintenance_cost);
+sprintf("Lifetime maintenance cost = %f\n", lifetime_maintenance_cost);
 
 % * Construction Cost *
+sprintf("Direct construction cost = %f\n", direct_construction_cost);
+sprintf("Total construction cost = %f\n", total_construction_cost);
+sprintf("Decomissioning cost = %f\n", decommissioning_cost);
+
+% * Personnel *
+sprintf("Hourly personnel cost = %f\n", hourly_personnel_cost);
+sprintf("Yearly personnel cost = %f\n", yearly_personnel_cost);
+
+% * Vacuum System *
+
 

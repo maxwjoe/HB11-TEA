@@ -203,6 +203,19 @@ classdef ProcessModule < handle
             flow_rate = reaction_output * 10^6 / mixed_mean_coolant_temperature_rise / specific_heat_of_coolant;
 
         end
+
+        % --- Vacuum System ---
+
+        %{ 
+            MassOfVacuumVessel : [TODO]
+            Inputs : 
+            Outputs : 
+        %}
+        function mass = MassOfVacuumVessel(radius_of_vacuum_vessel, wall_thickness_of_vacuum_vessel, density_of_vacuum_vessel_material)
+        
+            mass = pi * 6 * (radius_of_vacuum_vessel^2 - (radius_of_vacuum_vessel - wall_thickness_of_vacuum_vessel)^2) * density_of_vacuum_vessel_material;
+        
+        end
         
 
     end

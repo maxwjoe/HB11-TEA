@@ -85,6 +85,15 @@ decommissioning_cost_coefficient = 0.25;
 number_of_staff = 300;
 average_hourly_wage = 55;
 
+% * Vacuum System *
+shielding_material_costs_for_vacuum_vessel = 0;
+radius_of_vacuum_vessel = 10;
+wall_thickness_of_vacuum_vessel = 0.1;
+density_of_vacuum_vessel_material = 8000;
+vacuum_system_power_usage = 0.13;
+mass_flow_rate = 3594240;
+
+
 % === Model ===
 
 % * Laser *
@@ -136,6 +145,10 @@ decommissioning_cost = ECON.DecomissioningCost(decommissioning_cost_coefficient,
 hourly_personnel_cost = ECON.HourlyPersonnelCost(number_of_staff, average_hourly_wage);
 yearly_personnel_cost = ECON.YearlyPersonnelCost(hourly_personnel_cost);
 
+% * Vacuum System *
+mass_of_vacuum_vessel = PROC.MassOfVacuumVessel(radius_of_vacuum_vessel, wall_thickness_of_vacuum_vessel, density_of_vacuum_vessel_material);
+total_cost_of_vacuum_system = ECON.TotalCostOfVacuumSystem(mass_of_vacuum_vessel, shielding_material_costs_for_vacuum_vessel, mass_flow_rate);
+
 % === Display Outputs ===
 
 % * Laser *
@@ -184,6 +197,10 @@ sprintf("Total construction cost = %f\n", total_construction_cost);
 sprintf("Decomissioning cost = %f\n", decommissioning_cost);
 
 % * Personnel *
-sprintf("Hourly personnel cost = %f\n", hourly_personnel_cost)
-sprintf("Yearly personnel cost = %f\n", yearly_personnel_cost)
+sprintf("Hourly personnel cost = %f\n", hourly_personnel_cost);
+sprintf("Yearly personnel cost = %f\n", yearly_personnel_cost);
+
+% * Vacuum System *
+sprintf("Mass of vacuum vessel = %f\n", mass_of_vacuum_vessel)
+sprintf("Total cost of vacuum system = %f\n", total_cost_of_vacuum_system)
 

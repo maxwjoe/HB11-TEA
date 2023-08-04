@@ -229,6 +229,19 @@ classdef EconomicsModule < handle
 
         end
 
+        % --- Vacuum System ---
+
+        %{ 
+            TotalCostOfVacuumSystem : [TODO]
+            Inputs : 
+            Outputs : 
+        %}
+        function cost = TotalCostOfVacuumSystem(mass_of_vacuum_vessel, shielding_material_costs_for_vacuum_vessel, mass_flow_rate)
+        
+            cost = 90.69 * mass_of_vacuum_vessel + shielding_material_costs_for_vacuum_vessel + 13.04 * mass_flow_rate;
+        
+        end
+
 
     end
 
