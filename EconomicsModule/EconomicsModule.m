@@ -169,6 +169,42 @@ classdef EconomicsModule < handle
 
         end
 
+        % --- Construction Costs ---
+
+        %{ 
+            DirectConstructionCost : [TODO]
+            Inputs : 
+            Outputs : 
+        %}
+        function cost = DirectConstructionCost(land_cost, reactor_building_cost, turbine_building_cost, cooling_tower_system_cost, power_supply_and_energy_storage_cost, ventilation_stack_cost, miscellaneous_buildings_cost, laser_construction_cost)
+            
+            cost = land_cost + reactor_building_cost + turbine_building_cost + cooling_tower_system_cost + power_supply_and_energy_storage_cost + ventilation_stack_cost + miscellaneous_buildings_cost + laser_construction_cost;
+        
+        end
+
+        %{ 
+            TotalConstructionCost : [TODO]
+            Inputs : 
+            Outputs : 
+        %}
+        function cost = TotalConstructionCost(indirect_construction_costs, direct_construction_costs)
+            
+            cost = indirect_construction_costs + direct_construction_costs;
+
+        end
+
+        
+        %{ 
+            DecomissioningCost : [TODO]
+            Inputs : 
+            Outputs : 
+        %}
+        function cost = DecomissioningCost(decomissioning_cost_coefficient, direct_construction_cost)
+
+            cost = decomissioning_cost_coefficient * direct_construction_cost;
+
+        end
+
 
     end
 

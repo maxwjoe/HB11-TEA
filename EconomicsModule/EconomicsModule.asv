@@ -105,6 +105,17 @@ classdef EconomicsModule < handle
 
         end
 
+        % --- Cooling System ---
+
+        %{ 
+            TotalCoolantCost : [TODO]
+            Inputs : 
+            Outputs : 
+        %}
+        function cost = TotalCoolantCost(coolant_volume, coolant_density, coolant_cost)
+            cost = coolant_volume * coolant_density * coolant_cost;
+        end
+
         % --- Maintenance Cost ---
 
         %{ 
@@ -125,16 +136,60 @@ classdef EconomicsModule < handle
             diode = 0;
 
             if diode_replacement_interval ~= 0
-                diode = diode_replacement_cost * (laser_energy_input / 3600) * repetition_rate * floor(number_of_years_in_service) ;
+                diode = diode_replacement_cost * (laser_energy_input / 3600) * repetition_rate * floor(number_of_years_in_service / diode_replacement_interval) ;
+            end
+            
+            % Wall Costs
+            wall = lifetime_wall_replacement_cost;
+
+            % Coolant Costs
+            coolant = 0;
+
+            if coolant_replacement_interval ~= 0
+                coolant = total_coolant_cost * floor(number_of_years_in_service * coolant_replacement_interval);
             end
 
+            % Regular Costs
+            reg_costs = yearly_regular_maintenance_cost * number_of_years_in_service;
 
-
-
-           
+            % Total
+            cost = turbine + diode + wall + coolant + reg_costs;  
 
         end
 
+        
+        %{ 
+            YearlyRegularMaintenanceCosts : [TODO]
+            Inputs : 
+            Outputs : 
+        %}
+        function cost = YearlyRegularMaintenanceCosts(cost_of_maintenance_per_kwh, yearly_net_power_output)
+            
+            cost = cost_of_maintenance_per_kwh * 1000 * yearly_net_power_output;
+
+        end
+
+        % --- Construction Costs ---
+
+        %{ 
+            DirectConstructionCost : [TODO]
+            Inputs : 
+            Outputs : 
+        %}
+        function cost = DirectConstructionCost(land_cost, reactor_building_cost, turbine_building_cost, cooling_tower_system_cost, power_supply_and_energy_storage_cost, ventilation_stack_cost, miscellaneous_buildings_cost, laser_construction_cost)
+            
+            cost = land_cost + reactor_building_cost + turbine_building_cost + cooling_tower_system_cost + power_supply_and_energy_storage_cost + ventilation_stack_cost + miscellaneous_buildings_cost + laser_construction_cost;
+        
+        end
+
+        %{ 
+            TotalConstructionCost : [TODO]
+            Inputs : 
+            Outputs : 
+        %}
+        function cost = TotalConstructionCost(indirect_construction_costs, direct_construction_costs)
+            
+        end
 
 
     end

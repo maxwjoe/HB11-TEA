@@ -20,11 +20,6 @@ duty_cycle = 0.66;
 hohlraum = 0;
 electricity_generator_efficiency = 0.4;
 
-% * Power Generation *
-turbine_plant_equipment = 186700000;
-elec_rate = 72;
-vacuum_system_power_usage = 0.13;
-
 % * Fuel Manufacturing Costs *
 production_failure_rate = 0.1;
 fuel_pellet_mass = 1;
@@ -59,6 +54,11 @@ coolant_density = 6.095;
 cooling_system_pressure = 30000;
 coolant_replacement_interval = 4;
 
+% * Power Generation *
+turbine_plant_equipment = 186700000;
+elec_rate = 72;
+vacuum_system_power_usage = 0.13;
+
 % * Maintenance Cost *
 diode_replacement_cost = 1000000;
 turbine_generators_replacement_cost = 75000000;
@@ -67,6 +67,19 @@ number_of_years_in_service = 26;
 cost_of_maintenance_per_kwh = 0.00588;
 turbine_replacement_interval = 25.01;
 diode_replacement_interval = 7;
+
+% * Construction Cost *
+land_cost = 29;
+reactor_building_cost = 53;
+turbine_building_cost = 38;
+cooling_tower_system_cost = 14;
+power_supply_and_energy_storage_cost = 19;
+ventilation_stack_cost = 2;
+laser_construction_cost = 38;
+miscellaneous_buildings_cost = 148;
+inflation_coefficient = 0.045;
+indirect_construction_cost = 200;
+decommissioning_cost_coefficient = 0.25;
 
 
 % === Model ===
@@ -78,14 +91,6 @@ laser_energy_input = PROC.LaserEnergyInput(laser_eff, laser_energy_output);
 % * Reactor *
 reaction_output = PROC.ReactorEnergyTargetOutput(target_gain, laser_energy_output, hohlraum, increased_gain_by_hohlraum);
 realised_reactor_gain = PROC.RealisedReactorGain(reaction_output, electricity_generator_efficiency, laser_energy_input);
-
-% * Power Generation *
-gross_power_output = PROC.GrossPowerOutput(reaction_output, electricity_generator_efficiency);
-total_reactor_energy_consumption = PROC.TotalReactorEnergyConsumption(laser_energy_input, cooling_system_energy_consumption,vacuum_system_power_usage);
-total_reactor_energy_consumption_cost = ECON.TotalEnergyConsumptionCost(total_reactor_energy_consumption, elec_rate);
-net_power_output = PROC.NetPowerOutput(gross_power_output, total_reactor_energy_consumption);
-hours_in_operation_per_year = PROC.HoursInOperationPerYear(duty_cycle);
-yearly_net_power_output = PROC.YearlyNetPowerOutput(net_power_output, hours_in_operation_per_year);
 
 % * Fuel Manufacturing Costs *
 required_target_per_year = PROC.RequiredTargetsPerYear(repetition_rate, duty_cycle);
@@ -107,9 +112,22 @@ coolant_flow_rate = PROC.CoolantFlowRate(reaction_output, mixed_mean_coolant_tem
 cooling_system_energy_consumption = PROC.CoolingSystemEnergyConsumption(coolant_flow_rate, cooling_system_pressure);
 total_coolant_cost = ECON.TotalCoolantCost(coolant_volume, coolant_density, coolant_cost);
 
+% * Power Generation *
+gross_power_output = PROC.GrossPowerOutput(reaction_output, electricity_generator_efficiency);
+total_reactor_energy_consumption = PROC.TotalReactorEnergyConsumption(laser_energy_input, cooling_system_energy_consumption,vacuum_system_power_usage);
+total_reactor_energy_consumption_cost = ECON.TotalEnergyConsumptionCost(total_reactor_energy_consumption, elec_rate);
+net_power_output = PROC.NetPowerOutput(gross_power_output, total_reactor_energy_consumption);
+hours_in_operation_per_year = PROC.HoursInOperationPerYear(duty_cycle);
+yearly_net_power_output = PROC.YearlyNetPowerOutput(net_power_output, hours_in_operation_per_year);
+
 % * Maintenance Cost * 
 yearly_regular_maintenance_cost = ECON.YearlyRegularMaintenanceCosts(cost_of_maintenance_per_kwh, yearly_net_power_output);
 lifetime_maintenance_cost = ECON.LifetimeMaintenanceCost(number_of_years_in_service, turbine_replacement_interval, turbine_generators_replacement_cost, diode_replacement_cost, laser_energy_input, diode_replacement_interval, repetition_rate, lifetime_wall_replacement_cost, total_coolant_cost, coolant_replacement_interval, yearly_regular_maintenance_cost);
+
+% * Construction Cost *
+direct_construction_cost = ECON.DirectConstructionCost(land_cost, reactor_building_cost, turbine_building_cost, cooling_tower_system_cost, power_supply_and_energy_storage_cost, ventilation_stack_cost, miscellaneous_buildings_cost, laser_construction_cost);
+total_construction_cost = ECON.TotalConstructionCost(indirect_construction_cost, direct_construction_cost);
+decommissioning_cost = ECON.DecomissioningCost(decommissioning_cost_coefficient, direct_construction_cost);
 
 % === Display Outputs ===
 
@@ -120,14 +138,6 @@ sprintf("Laser Energy Input = %f\n", laser_energy_input);
 % * Reactor *
 sprintf("Reaction Output = %f\n", reaction_output);
 sprintf("Realised Reactor Gain = %f\n", realised_reactor_gain);
-
-% * Power Generation *
-sprintf("Gross Power Output = %f\n", gross_power_output);
-sprintf("Total Reactor Energy Consumption = %f\n", total_reactor_energy_consumption);
-sprintf("Total Reactor Energy Consumption Cost = %f\n", total_reactor_energy_consumption_cost);
-sprintf("Net Power Output = %f\n", net_power_output);
-sprintf("Hours In Operation Per Year = %f\n", hours_in_operation_per_year);
-sprintf("Yearly Net Power Output = %f\n", yearly_net_power_output);
 
 % * Fuel Manufacturing Costs *
 sprintf("Required Targets Per Year = %f\n", required_target_per_year);
@@ -149,7 +159,19 @@ sprintf("Coolant flow rate = %f\n",coolant_flow_rate);
 sprintf("Cooling system energy consumption = %f\n",cooling_system_energy_consumption);
 sprintf("Total coolant cost = %f\n",total_coolant_cost);
 
-% * Maintenance Cost * 
-sprintf("Yearly regular maintenance cost = %f\n", yearly_regular_maintenance_cost)
-sprintf("Lifetime maintenance cost = %f\n", lifetime_maintenance_cost)
+% * Power Generation *
+sprintf("Gross Power Output = %f\n", gross_power_output);
+sprintf("Total Reactor Energy Consumption = %f\n", total_reactor_energy_consumption);
+sprintf("Total Reactor Energy Consumption Cost = %f\n", total_reactor_energy_consumption_cost);
+sprintf("Net Power Output = %f\n", net_power_output);
+sprintf("Hours In Operation Per Year = %f\n", hours_in_operation_per_year);
+sprintf("Yearly Net Power Output = %f\n", yearly_net_power_output);
 
+% * Maintenance Cost * 
+sprintf("Yearly regular maintenance cost = %f\n", yearly_regular_maintenance_cost);
+sprintf("Lifetime maintenance cost = %f\n", lifetime_maintenance_cost);
+
+% * Construction Cost *
+sprintf("Direct construction cost = %f\n", direct_construction_cost)
+sprintf("Total construction cost = %f\n", total_construction_cost)
+sprintf("Decomissioning cost = %f\n", decommissioning_cost)
