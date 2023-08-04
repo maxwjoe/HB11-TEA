@@ -81,6 +81,9 @@ inflation_coefficient = 0.045;
 indirect_construction_cost = 200;
 decommissioning_cost_coefficient = 0.25;
 
+% * Personnel *
+number_of_staff = 300;
+average_hourly_wage = 55;
 
 % === Model ===
 
@@ -129,6 +132,10 @@ direct_construction_cost = ECON.DirectConstructionCost(land_cost, reactor_buildi
 total_construction_cost = ECON.TotalConstructionCost(indirect_construction_cost, direct_construction_cost);
 decommissioning_cost = ECON.DecomissioningCost(decommissioning_cost_coefficient, direct_construction_cost);
 
+% * Personnel *
+hourly_personnel_cost = ECON.HourlyPersonnelCost(number_of_staff, average_hourly_wage);
+yearly_personnel_cost = ECON.YearlyPersonnelCost(hourly_personnel_cost);
+
 % === Display Outputs ===
 
 % * Laser *
@@ -172,6 +179,11 @@ sprintf("Yearly regular maintenance cost = %f\n", yearly_regular_maintenance_cos
 sprintf("Lifetime maintenance cost = %f\n", lifetime_maintenance_cost);
 
 % * Construction Cost *
-sprintf("Direct construction cost = %f\n", direct_construction_cost)
-sprintf("Total construction cost = %f\n", total_construction_cost)
-sprintf("Decomissioning cost = %f\n", decommissioning_cost)
+sprintf("Direct construction cost = %f\n", direct_construction_cost);
+sprintf("Total construction cost = %f\n", total_construction_cost);
+sprintf("Decomissioning cost = %f\n", decommissioning_cost);
+
+% * Personnel *
+sprintf("Hourly personnel cost = %f\n", hourly_personnel_cost)
+sprintf("Yearly personnel cost = %f\n", yearly_personnel_cost)
+

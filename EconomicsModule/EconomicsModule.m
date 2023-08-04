@@ -204,6 +204,30 @@ classdef EconomicsModule < handle
             cost = decomissioning_cost_coefficient * direct_construction_cost;
 
         end
+        
+        % --- Personnel ---
+        
+        %{ 
+            HourlyPersonnelCost : [TODO]
+            Inputs : 
+            Outputs : 
+        %}
+        function cost = HourlyPersonnelCost(number_of_staff, average_hourly_wage)
+
+            cost = number_of_staff * average_hourly_wage;
+
+        end
+
+        %{ 
+            YearlyPersonnelCost : [TODO]
+            Inputs : 
+            Outputs : 
+        %}
+        function cost = YearlyPersonnelCost(hourly_personnel_cost)
+
+            cost = hourly_personnel_cost * 7.6*7*52.18;
+
+        end
 
 
     end
