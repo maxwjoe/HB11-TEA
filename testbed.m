@@ -57,7 +57,6 @@ coolant_replacement_interval = 4;
 % * Power Generation *
 turbine_plant_equipment = 186700000;
 elec_rate = 72;
-vacuum_system_power_usage = 0.13;
 
 % * Maintenance Cost *
 diode_replacement_cost = 1000000;
@@ -134,7 +133,7 @@ yearly_net_power_output = PROC.YearlyNetPowerOutput(net_power_output, hours_in_o
 
 % * Maintenance Cost * 
 yearly_regular_maintenance_cost = ECON.YearlyRegularMaintenanceCosts(cost_of_maintenance_per_kwh, yearly_net_power_output);
-lifetime_maintenance_cost = ECON.LifetimeMaintenanceCost(number_of_years_in_service, turbine_replacement_interval, turbine_generators_replacement_cost, diode_replacement_cost, laser_energy_input, diode_replacement_interval, repetition_rate, lifetime_wall_replacement_cost, total_coolant_cost, coolant_replacement_interval, yearly_regular_maintenance_cost)
+lifetime_maintenance_cost = ECON.LifetimeMaintenanceCost(number_of_years_in_service, turbine_replacement_interval, turbine_generators_replacement_cost, diode_replacement_cost, laser_energy_input, diode_replacement_interval, repetition_rate, lifetime_wall_replacement_cost, total_coolant_cost, coolant_replacement_interval, yearly_regular_maintenance_cost);
 
 % * Construction Cost *
 direct_construction_cost = ECON.DirectConstructionCost(land_cost, reactor_building_cost, turbine_building_cost, cooling_tower_system_cost, power_supply_and_energy_storage_cost, ventilation_stack_cost, miscellaneous_buildings_cost, laser_construction_cost);
@@ -189,7 +188,7 @@ sprintf("Yearly Net Power Output = %f\n", yearly_net_power_output);
 
 % * Maintenance Cost * 
 sprintf("Yearly regular maintenance cost = %f\n", yearly_regular_maintenance_cost);
-sprintf("Lifetime maintenance cost = %f\n", lifetime_maintenance_cost);
+sprintf("Lifetime maintenance cost = %f\n", lifetime_maintenance_cost)
 
 % * Construction Cost *
 sprintf("Direct construction cost = %f\n", direct_construction_cost);
