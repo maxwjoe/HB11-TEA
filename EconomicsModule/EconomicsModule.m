@@ -30,7 +30,7 @@ classdef EconomicsModule < handle
         % TotalFuelManufacturingCostsOngoing : Ongoing fuel man costs
         function cost = TotalFuelManufacturingCostsOngoing(manufacturing_overhead_costs, fuel_target_production_per_year, total_cost_per_target)
 
-            cost = manufacturing_overhead_costs+fuel_target_production_per_year*(total_cost_per_target);
+            cost = manufacturing_overhead_costs + fuel_target_production_per_year * ( total_cost_per_target );
 
         end
 
