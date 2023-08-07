@@ -45,7 +45,7 @@ classdef ApplicationModule < handle
         function data = PostInputs(obj)
 
             % Perform a batch read operation on the data store and return
-            input_keys = obj.DS.getKeys("in_");
+            input_keys = obj.DS.getKeys("IN_");
             data = obj.DS.batchRead(input_keys);
 
         end
