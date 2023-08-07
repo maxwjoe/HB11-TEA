@@ -155,7 +155,8 @@ classdef DataStoreModule < handle
         function p_enforceExistField(obj, key)
             
             if ~obj.p_checkExistField(key)
-                error('The field " %s " does not exist in the data store.')
+                disp(obj.m_data_store)
+                error('The field " %s " does not exist in the data store.', key)
             end
 
         end
