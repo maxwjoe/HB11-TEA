@@ -146,6 +146,7 @@ annual_cost_of_operations_and_maintenance = ECON.AnnualCostOfOperationsAndMainte
 annual_cost_of_schedule_part_replacements = ECON.AnnualCostOfSchedulePartReplacements(lifetime_maintenance_cost, IN_number_of_years_in_service, yearly_regular_maintenance_cost);
 annual_cost_of_fuel = ECON.AnnualCostOfFuel(total_fuel_manufacturing_costs_ongoing);
 cost_of_decomissioning = ECON.CostOfDecomissioning(decomissioning_cost, yearly_net_energy_output, IN_number_of_years_in_service);
+lcoe = ECON.LCOE(annual_cost_of_upfront_capital, annual_cost_of_operations_and_maintenance, annual_cost_of_schedule_part_replacements, annual_cost_of_fuel, cost_of_decomissioning, inflation_coefficient, IN_number_of_years_in_service, yearly_net_energy_output);
 
 % [Financial Projections]
 income_ts = ECON.IncomeTS(IN_electricity_rate, yearly_net_energy_output, inflation_coefficient, 300);

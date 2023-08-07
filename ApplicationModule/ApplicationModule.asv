@@ -271,8 +271,7 @@ classdef ApplicationModule < handle
         outputs.OUT_projected_lifetime_cost_ = projected_lifetime_cost_with_inflation;
         outputs.OUT_projected_lifetime_gross_revenue_ = projected_lifetime_gross_revenue_with_inflation;
         outputs.OUT_projected_lifetime_net_revenue_ = projected_lifetime_net_revenue_with_inflation;
-
-        outputs.OUT_total_project_cost_ts_ = total_project_cost_ts;
+        outputs.OUT_total_proj
         
         % --- Write to datastore ---
         obj.DS.batchWrite(outputs);
