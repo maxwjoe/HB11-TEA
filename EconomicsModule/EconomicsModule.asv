@@ -80,32 +80,7 @@ classdef EconomicsModule < handle
         end
 
         % AnnualCostOfFuel : Annual cost of fuel
-        function c_f = AnnualCostOfFuel()
-        end
-
-        % CostOfDecomissioning : Cost to decomission plant
-        function c_dd = CostOfDecomissioning()
-        end
-
-        % LCOE : The levelized cost of electricity
-        function lcoe = LCOE()
-        end
-
-        % TotalProjectCost : Time series data for project cost
-        function tpc_ts = TotalProjectCost()
-        end
-
-        % ProjectedLifetimeCostWithInflation : Lifetime cost
-        function cost = ProjectedLifetimeCostWithInflation()
-        end
-
-        % ProjectedLifetimeGrossRevenueWithInflation : Gross revenue
-        function revenue = ProjectedLifetimeGrossRevenueWithInflation()
-        end
-
-        % ProjectedLifetimeNetRevenueWithInflation : Net revenue
-        function revenue = ProjectedLifetimeNetRevenueWithInflation()
-        end
+        function c_f = AnnualCost
   
     end
 

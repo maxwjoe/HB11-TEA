@@ -36,12 +36,7 @@ classdef ProcessModule < handle
         end
 
         % HoursInOperationPerYear : Yearly hours in operation
-        function hours = HoursInOperationPerYear()
-        end
-
-        % YearlyNetEnergyOutput : Net energy output for a year
-        function out = YearlyNetEnergyOutput()
-        end
+        function out
         
 
     end
