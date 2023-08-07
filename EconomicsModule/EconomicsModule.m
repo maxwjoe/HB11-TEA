@@ -154,20 +154,40 @@ classdef EconomicsModule < handle
         end
 
         % TotalProjectCost : Time series data for project cost
-        function tpc_ts = TotalProjectCost()
+        function tpc_ts = TotalProjectCost(capital_cost, yearly_cost, c_om, inflation_coefficient, income_ts)
+
+            tpc_0 = capital_cost + yearly_cost / 12;
+            tpc_p = tpc_0;
+            
+            tpc_ts = tpc_0;
+            num_periods = length(income_ts);
+
+            for i = 1:num_periods-1
+
+                tpc_i = (tpc_p + c_om/12 - income_ts(i))*(1 + inflation_coefficient/12);
+                tpc_ts = [tpc_ts, tpc_i];
+                tpc_p = tpc_i;
+
+            end
+
         end
 
         % ProjectedLifetimeCostWithInflation : Lifetime cost
-        function cost = ProjectedLifetimeCostWithInflation()
+        function cost = ProjectedLifetimeCostWithInflation(income_ts)
+            cost = sum(income_ts);
         end
 
         % ProjectedLifetimeGrossRevenueWithInflation : Gross revenue
-        function revenue = ProjectedLifetimeGrossRevenueWithInflation()
+        function revenue = ProjectedLifetimeGrossRevenueWithInflation(projected_lifetime_cost_with_inflation, projected_lifetime_net_revenue_with_inflation)
+            revenue = projected_lifetime_cost_with_inflation + projected_lifetime_net_revenue_with_inflation;
         end
 
         % ProjectedLifetimeNetRevenueWithInflation : Net revenue
-        function revenue = ProjectedLifetimeNetRevenueWithInflation()
+        function revenue = ProjectedLifetimeNetRevenueWithInflation(total_project_cost_ts)
+            revenue = -total_project_cost_ts(end);
         end
+
+        % INCOME : 
 
         % --- Not in UI ---
 
@@ -248,8 +268,30 @@ classdef EconomicsModule < handle
 
         end
 
+        % --- Helper Methods ---
+
+
+         % IncomeTS : Income time series
+        function ts = IncomeTS(electricity_rate, yearly_net_energy_output, inflation_coefficient, periods)
+            
+            income_i = electricity_rate * yearly_net_energy_output / 12;
+            ts = income_i;
+    
+            for i = 1:periods
+    
+                income_i = income_i * (1 + inflation_coefficient/12);
+                ts = [ts, income_i];
+    
+            end
+    
+        end
+
 
     end
+
+   
+
+
 
     % === Private Properties ===
     properties (Access = public)
