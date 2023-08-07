@@ -24,7 +24,8 @@ classdef ApplicationModule < handle
 
         % LoadInputs : Load input values from UI into Data Layer
         function LoadInputs(obj, data)
-      
+            print("Loading : ")
+            print(data);
             % Perform a batch write operation to the data store
             obj.DS.batchWrite(data);
 
