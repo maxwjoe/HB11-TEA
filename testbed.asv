@@ -39,7 +39,7 @@ cost_of_manufacturing_per_pellet = 0.08;
 cost_of_manufacturing_per_capacitive_coil_and_hydrogen_cone = 0.15;
 total_cost_of_fuel_development = 100000000;
 total_cost_of_manufacturing_facilities = 50000000;
-total_manufacuring_overhead_costs = 3000000;
+total_manufacturing_overhead_costs = 3000000;
 final_assembly_cost_per_target = 0.06;
 storage_cost = 1000;
 storage_footprint_per_target = 0.009;
@@ -75,15 +75,46 @@ coolant_pipe_outlet_radius = 0.39;
 average_hourly_wage = 55;
 shielding_material_costs_for_vacuum_vessel = 0;
 radius_of_vacuum_vessel = 10;
-height_of_vacuum_v
-
-
-
-
-
-
+height_of_vacuum_vessel = 15;
+wall_thickness_of_vacuum_vessel = 0.01;
+density_of_vacuum_vessel_material = 8000;
+vacuum_system_power_usage = 0.13;
 
 % === Model ===
+
+% [Primary Laser - Power Generation]
+
+laser_energy_output = PROC.LaserEnergyOutput(IN_total_laser_energy_per_pulse, IN_repetition_rate);
+laser_energy_input = PROC.LaserEnergyInput(laser_energy_output, IN_laser_efficiency);
+thermal_reaction_energy_output = PROC.ThermalReactionEnergyOutput(IN_x_factor, IN_increased_gain_by_x_factor, IN_target_gain, laser_energy_output);
+gross_energy_output = PROC.GrossEnergyOutput(thermal_reaction_energy_output, IN_electricity_generator_efficiency);
+realised_reactor_gain = PROC.RealisedReactorGain(gross_energy_output, laser_energy_input);
+cooling_system_energy_consumption = PROC.CoolingSystemEnergyConsumption(thermal_reaction_energy_output);
+total_reactor_energy_consumption = PROC.TotalReactorEnergyConsumption(laser_energy_input, cooling_system_energy_consumption, vacuum_system_power_usage);
+net_energy_output = PROC.NetEnergyOutput(gross_energy_output, total_reactor_energy_consumption);
+hours_in_operation_per_year = PROC.HoursInOperationPerYear(IN_duty_cycle);
+yearly_net_energy_output = PROC.YearlyNetEnergyOutput(net_energy_output, hours_in_operation_per_year);
+laser_equipment_cost = ECON.LaserEquipmentCost(net_energy_output);
+
+% [Fuel Manufacturing - Maintenance + Cooling System]
+
+cooling_system_energy_consumption = PROC.CoolingSystemEnergyConsumption(thermal_reaction_energy_output);
+total_coolant_cost = ECON.TotalCoolantCost(coolant_volume, coolant_density, coolant_cost);
+coolant_flow_rate = PROC.CoolantFlowRate(therm)
+
+required_targets_per_year = PROC.RequiredTargetsPerYear(IN_repetition_rate, IN_duty_cycle);
+fuel_target_production_per_year = PROC.FuelTargetProductionPerYear(required_targets_per_year, production_failure_rate);
+total_cost_per_pellet = ECON.TotalCostPerPellet(fuel_pellet_mass, fuel_pellet_percentage_boron_nitride, cost_of_boron_nitride, cost_of_manufacturing_per_pellet);
+total_cost_per_target_with_x_factor = ECON.TotalCostPerTargetWithXFactor(IN_x_factor, IN_total_cost_of_x_factor);
+total_material_cost_per_capacitive_coil_and_hydrogen_cone = ECON.TotalMaterialCostPerCapacitiveCoilAndHydrogenCone(hydrogen_precursor_mass, cost_of_hydrogen);
+total_cost_per_capacitive_coil_and_hydrogen_cone = ECON.TotalCostPerCapacitiveCoilAndHydrogenCone(IN_capacitive_coil_and_hydrogen_cone, total_material_cost_per_capacitive_coil_and_hydrogen_cone, cost_of_manufacturing_per_capacitive_coil_and_hydrogen_cone);
+total_cost_per_target = ECON.TotalCostPerTarget(total_cost_per_pellet, total_cost_per_target_with_x_factor, total_cost_per_capacitive_coil_and_hydrogen_cone, final_assembly_cost_per_target);
+total_fuel_manufacturing_costs_upfront = ECON.TotalFuelManufacturingCostsUpfront(total_cost_of_fuel_development, total_cost_of_manufacturing_facilities);
+total_fuel_manufacturing_costs_ongoing = ECON.TotalFuelManufacturingCostsOngoing(total_manufacturing_overhead_costs, fuel_target_production_per_year, total_cost_per_target);
+total_cost_of_fuel_delivery_and_storage = ECON.TotalCostOfFuelDeliveryAndStorage(total_cost_of_fuel_storage, cost_of_fuel_delivery_robot);
+number_of_targets_required_in_storage = PROC.NumberOfTargetsRequiredInStorage(IN_repetition_rate, IN_duty_cycle, required_redundancy);
+yearly_regular_maintenance_cost = ECON.YearlyRegularMaintenanceCost(cost_of_maintenance_per_kwh, yearly_net_energy_output);
+lifetime_maintenance_cost = ECON.LifetimeMaintenanceCost(IN_number_of_years_in_service, turbine_replacement_interval, turbine_generators_replacement_cost, diode_replacement_cost, laser_energy_input, diode_replacement_interval, IN_repetition_rate, lifetime_wall_replacement_cost, total_coolant_cost, coolant_replacement_interval, yearly_regular_maintenance_cost);
 
 
 % === Display Outputs ===
