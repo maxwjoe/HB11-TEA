@@ -133,17 +133,23 @@ mass_of_vacuum_vessel = PROC.MassOfVacuumVessel(height_of_vacuum_vessel, radius_
 total_cost_of_vacuum_system = ECON.TotalCostOfVacuumSystem(mass_of_vacuum_vessel, shielding_material_costs_for_vacuum_vessel, IN_mass_flow_rate);
 
 % [Overall]
-
-capital_costs = ECON.CapitalCost(total_cost_of_vacuum_system, total_fuel_manufacturing_costs_upfront, total_construction_cost, total_cost_of_fuel_delivery_and_storage, turbine_plant_equipment, total_coolant_cost, instrumentation_and_control_system_cost, reactor_shielding_initial_cost, laser_equipment_cost);
+capital_cost = ECON.CapitalCost(total_cost_of_vacuum_system, total_fuel_manufacturing_costs_upfront, total_construction_cost, total_cost_of_fuel_delivery_and_storage, turbine_plant_equipment, total_coolant_cost, instrumentation_and_control_system_cost, reactor_shielding_initial_cost, laser_equipment_cost);
+yearly_cost = ECON.YearlyCost(yearly_personnel_cost, total_fuel_manufacturing_costs_ongoing, lifetime_maintenance_cost, number_of_years_in_service);
+yearly_gross_revenue = ECON.YearlyGrossRevenue(yearly_net_energy_output, electricity_rate);
+yearly_profit = ECON.YearlyProfit(yearly_gross_revenue, yearly_cost);
+lifetime_cost_no_inflation = ECON.LifetimeCostNoInflation(yearly_cost, IN_number_of_years_in_service, capital_cost);
+lifetime_profit_no_inflation = ECON.LifetimeProfitNoInflation(yearly_profit, number_of_years_in_service);
 
 % [LCOE]
+annual_cost_of_upfront_capital = ECON.AnnualCostOfUpfrontCapital(capital_cost, IN_number_of_years_in_service);
+annual_cost_of_opera
 
 % [Financial Projections]
 income_ts = ECON.IncomeTS(IN_electricity_rate, yearly_net_energy_output, inflation_coefficient, 300);
-total_project_cost_ts = ECON.TotalProjectCost(capital_costs, 89071356.16, 66454773.58, inflation_coefficient, income_ts);
+total_project_cost_ts = ECON.TotalProjectCost(capital_cost, 89071356.16, 66454773.58, inflation_coefficient, income_ts);
 projected_lifetime_cost_with_inflation = ECON.ProjectedLifetimeCostWithInflation(income_ts);
-projected_lifetime_net_revenue_with_inflation = ECON.ProjectedLifetimeGrossRevenueWithInflation()
-projected_lifetime_gross_revenue_with_inflation = ECON.ProjectedLifetimeGrossRevenueWithInflation(projected_lifetime_cost_with_inflation, )
+projected_lifetime_net_revenue_with_inflation = ECON.ProjectedLifetimeNetRevenueWithInflation(total_project_cost_ts);
+projected_lifetime_gross_revenue_with_inflation = ECON.ProjectedLifetimeGrossRevenueWithInflation(projected_lifetime_cost_with_inflation, projected_lifetime_net_revenue_with_inflation);
 
 
 
