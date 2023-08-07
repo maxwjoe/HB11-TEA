@@ -225,7 +225,8 @@ classdef ApplicationModule < handle
         total_cost_of_vacuum_system = obj.ECON.TotalCostOfVacuumSystem(mass_of_vacuum_vessel, shielding_material_costs_for_vacuum_vessel, IN_mass_flow_rate);
         
         outputs.OUT_total_construction_cost_ = total_construction_cost;
-        
+        outputs.OUT_yearly_personnel_cost_ = yearly_personnel_cost;
+        outputs.OUT_total_cost_of_vacuum_system_ = total_cost_of_vacuum_system;
 
 
         % [Overall]
@@ -235,6 +236,13 @@ classdef ApplicationModule < handle
         yearly_profit = obj.ECON.YearlyProfit(yearly_gross_revenue, yearly_cost);
         lifetime_cost_no_inflation = obj.ECON.LifetimeCostNoInflation(yearly_cost, IN_number_of_years_in_service, capital_cost);
         lifetime_profit_no_inflation = obj.ECON.LifetimeProfitNoInflation(yearly_profit, IN_number_of_years_in_service);
+
+        outputs.OUT_capital_cost_ = capital_cost;
+        outputs.OUT_yearly_cost_ = yearly_cost;
+        outputs.OUT_yearly_gross_revenue_ = yearly_gross_revenue;
+        outputs.OUT_yearly_profit_ = yearly_profit;
+        outputs.OUT_lifetime_cost_without_inflation_ = lifetime_cost_no_inflation;
+        outputs.OUT_lifetime_profit_without_inflation_ = lifetime_profit_no_inflation;
         
         % [LCOE]
         annual_cost_of_upfront_capital = obj.ECON.AnnualCostOfUpfrontCapital(capital_cost, IN_number_of_years_in_service);
@@ -242,6 +250,15 @@ classdef ApplicationModule < handle
         annual_cost_of_schedule_part_replacements = obj.ECON.AnnualCostOfSchedulePartReplacements(lifetime_maintenance_cost, IN_number_of_years_in_service, yearly_regular_maintenance_cost);
         annual_cost_of_fuel = obj.ECON.AnnualCostOfFuel(total_fuel_manufacturing_costs_ongoing);
         cost_of_decomissioning = obj.ECON.CostOfDecomissioning(decomissioning_cost, yearly_net_energy_output, IN_number_of_years_in_service);
+        lcoe = obj.ECON.LCOE(annual_cost_of_upfront_capital, annual_cost_of_operations_and_maintenance, annual_cost_of_schedule_part_replacements, annual_cost_of_fuel, cost_of_decomissioning, inflation_coefficient, IN_number_of_years_in_service, yearly_net_energy_output);
+
+
+        outputs.OUT_annual_cost_of_upfront_capital_ = annual_cost_of_upfront_capital;
+        outputs.OUT_annual_cost_of_operations_and_maintenance_ = annual_cost_of_operations_and_maintenance;
+        outputs.OUT_annual_cost_of_scheduled_part_replacements_ = annual_cost_of_schedule_part_replacements;
+        outputs.OUT_annual_cost_of_fuel_ = annual_cost_of_fuel;
+        outputs.OUT_cost_of_decomissioning_ = cost_of_decomissioning;
+        outputs.OUT_lcoe_ = lcoe;
         
         % [Financial Projections]
         income_ts = obj.ECON.IncomeTS(IN_electricity_rate, yearly_net_energy_output, inflation_coefficient, 300);
@@ -250,7 +267,13 @@ classdef ApplicationModule < handle
         projected_lifetime_net_revenue_with_inflation = obj.ECON.ProjectedLifetimeNetRevenueWithInflation(total_project_cost_ts);
         projected_lifetime_gross_revenue_with_inflation = obj.ECON.ProjectedLifetimeGrossRevenueWithInflation(projected_lifetime_cost_with_inflation, projected_lifetime_net_revenue_with_inflation);
         
-
+        
+        outputs.OUT_projected_lifetime_cost_ = projected_lifetime_cost_with_inflation;
+        outputs.OUT_projected_lifetime_gross_revenue_ = projected_lifetime_gross_revenue_with_inflation;
+        outputs.OUT_projected_lifetime_net_revenue_ = projected_lifetime_net_revenue_with_inflation;
+        outputs.OUT_total_proj
+        
+        % --- Write to datastore ---
         obj.DS.batchWrite(outputs);
 
         end
