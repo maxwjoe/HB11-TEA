@@ -132,6 +132,9 @@ yearly_personnel_cost = ECON.YearlyPersonnelCost(hourly_personnel_cost);
 mass_of_vacuum_vessel = PROC.MassOfVacuumVessel(height_of_vacuum_vessel, radius_of_vacuum_vessel, wall_thickness_of_vacuum_vessel, density_of_vacuum_vessel_material);
 total_cost_of_vacuum_system = ECON.TotalCostOfVacuumSystem(mass_of_vacuum_vessel, shielding_material_costs_for_vacuum_vessel, IN_mass_flow_rate);
 
+% [Overall]
+
+capital_costs = ECON.CapitalCost(total_cost_of_vacuum_system, total_fuel_manufacturing_costs_upfront, total_construction_cost, total_cost_of_fuel_delivery_and_storage, turbine_plant_equipment, total_coolant_cost, instrumentation_and_control_system_cost, reactor_shielding_initial_cost, laser_equipment_cost);
 
 
 

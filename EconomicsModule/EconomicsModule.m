@@ -70,51 +70,87 @@ classdef EconomicsModule < handle
         end
 
         % Capital Cost : Captial costs
-        function cost = CapitalCost()
+        function cost = CapitalCost(total_cost_of_vacuum_system, total_fuel_manufacturing_costs_upfront, total_construction_cost, total_cost_of_fuel_delivery_and_storage, turbine_plant_equipment, total_coolant_cost, instrumentation_and_control_system_cost, reactor_shielding_initial_cost, laser_equipment_cost)
+
+            cost = total_cost_of_vacuum_system + total_fuel_manufacturing_costs_upfront + total_construction_cost * 10^6 + total_cost_of_fuel_delivery_and_storage + turbine_plant_equipment + total_coolant_cost + (instrumentation_and_control_system_cost + reactor_shielding_initial_cost + laser_equipment_cost) * 10^6;
+
         end
 
         % YearlyCost : Yearly Cost
-        function cost = YearlyCost()
+        function cost = YearlyCost(yearly_personnel_cost, total_fuel_manufacturing_costs_ongoing, lifetime_maintenance_cost, number_of_years_in_service)
+
+            cost = yearly_personnel_cost + total_fuel_manufacturing_costs_ongoing + lifetime_maintenance_cost/number_of_years_in_service;
+
         end
 
         % YearlyGrossRevenue : Yearly gross revenue
-        function revenue = YearlyGrossRevenue()
+        function revenue = YearlyGrossRevenue(yearly_net_energy_output, electricity_rate)
+            
+            revenue = yearly_net_energy_output * electricity_rate;
+
         end
 
         % YearlyProfit : Yearly profit
-        function profit = YearlyProfit()
+        function profit = YearlyProfit(yearly_gross_revenue, yearly_cost)
+
+            profit = yearly_gross_revenue - yearly_cost;
+
         end
 
         % LifetimeCostNoInflation : Lifetime cost (no inflation)
-        function cost = LifetimeCostNoInflation()
+        function cost = LifetimeCostNoInflation(yearly_cost, number_of_years_in_service, capital_cost)
+
+            cost = yearly_cost * number_of_years_in_service + capital_cost;
+
         end
 
         % LifetimeProfitNoInflation : Lifetime profit (no inflation)
-        function profit = LifetimeProfitNoInflation()
+        function profit = LifetimeProfitNoInflation(yearly_profit, number_of_years_in_service)
+
+            profit = yearly_profit * number_of_years_in_service;
+
         end
 
         % AnnualCostOfUpfrontCapital : Annual cost of upfront capital
-        function c_ac = AnnualCostOfUpfrontCapital()
+        function c_ac = AnnualCostOfUpfrontCapital(capital_cost, number_of_years_in_service)
+
+            c_ac = capital_cost / number_of_years_in_service;
+
         end
 
         % AnnualCostOfOperationsAndMaintenance : Annual cost of op and main
-        function c_om = AnnualCostOfOperationsAndMaintenance()
+        function c_om = AnnualCostOfOperationsAndMaintenance(yearly_personnel_cost, yearly_regular_maintenance_cost)
+            
+            c_om = yearly_personnel_cost + yearly_regular_maintenance_cost;
+
         end
 
         % AnnualCostOfSchedulePartReplacements : Annual cost of replace
-        function c_scr = AnnualCostOfSchedulePartReplacements()
+        function c_scr = AnnualCostOfSchedulePartReplacements(lifetime_maintenance_cost, number_of_years_in_service, yearly_regular_maintenance_cost)
+
+            c_scr = lifetime_maintenance_cost/number_of_years_in_service - yearly_regular_maintenance_cost;
+
         end
 
         % AnnualCostOfFuel : Annual cost of fuel
-        function c_f = AnnualCostOfFuel()
+        function c_f = AnnualCostOfFuel(total_fuel_manufacturing_costs_ongoing)
+            
+            c_f = total_fuel_manufacturing_costs_ongoing;
+        
         end
 
         % CostOfDecomissioning : Cost to decomission plant
-        function c_dd = CostOfDecomissioning()
+        function c_dd = CostOfDecomissioning(decomissioning_cost, yearly_net_energy_output, number_of_years_in_service)
+
+            c_dd = (decomissioning_cost * 10^6) / (yearly_net_energy_output * number_of_years_in_service);
+
         end
 
         % LCOE : The levelized cost of electricity
-        function lcoe = LCOE()
+        function lcoe = LCOE(c_ac, c_om, c_scr, c_f, c_dd, inflation_coefficient, number_of_years_in_service, yearly_net_energy_output)
+
+            lcoe = ((c_ac+(c_om+c_scr+c_f)*(1+inflation_coefficient)^number_of_years_in_service)/(yearly_net_energy_output)+c_dd);
+
         end
 
         % TotalProjectCost : Time series data for project cost

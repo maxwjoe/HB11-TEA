@@ -30,7 +30,7 @@ classdef EconomicsModule < handle
         % TotalFuelManufacturingCostsOngoing : Ongoing fuel man costs
         function cost = TotalFuelManufacturingCostsOngoing(manufacturing_overhead_costs, fuel_target_production_per_year, total_cost_per_target)
 
-            cost = manufacturing_overhead_costs+fuel_target_production_per_year*(total_cost_per_target);
+            cost = manufacturing_overhead_costs + fuel_target_production_per_year * ( total_cost_per_target );
 
         end
 
@@ -49,63 +49,108 @@ classdef EconomicsModule < handle
         end
 
         % TotalConstructionCost : Total cost of construction
-        function cost = TotalConstructionCost()
+        function cost = TotalConstructionCost(indirect_construction_cost, direct_construction_cost)
+            
+            cost = indirect_construction_cost + direct_construction_cost;
+
         end
 
         % YearlyPersonnelCost : Cost of personnel for a year
-        function cost = YearlyPersonnelCost()
+        function cost = YearlyPersonnelCost(hourly_personnel_cost)
+
+            cost = hourly_personnel_cost*7.6*7*52.18;
+
         end
 
         % TotalCostOfVacuumSystem : Total cost for vacuum system
-        function cost = TotalCostOfVacuumSystem()
+        function cost = TotalCostOfVacuumSystem(mass_of_vacuum_vessel, shielding_material_costs_for_vacuum_vessel, mass_flow_rate)
+
+            cost = 90.69 * mass_of_vacuum_vessel + shielding_material_costs_for_vacuum_vessel + 13.04 * mass_flow_rate * 112.32;
+
         end
 
         % Capital Cost : Captial costs
-        function cost = CapitalCost()
+        function cost = CapitalCost(total_cost_of_vacuum_system, total_fuel_manufacturing_costs_upfront, total_construction_cost, total_cost_of_fuel_delivery_and_storage, turbine_plant_equipment, total_coolant_cost, instrumentation_and_control_system_cost, reactor_shielding_initial_cost, laser_equipment_cost)
+
+            cost = total_cost_of_vacuum_system + total_fuel_manufacturing_costs_upfront + total_construction_cost * 10^6 + total_cost_of_fuel_delivery_and_storage + turbine_plant_equipment + total_coolant_cost + (instrumentation_and_control_system_cost + reactor_shielding_initial_cost + laser_equipment_cost) * 10^6;
+
         end
 
         % YearlyCost : Yearly Cost
-        function cost = YearlyCost()
+        function cost = YearlyCost(yearly_personnel_cost, total_fuel_manufacturing_costs_ongoing, lifetime_maintenance_cost, number_of_years_in_service)
+
+            cost = yearly_personnel_cost + total_fuel_manufacturing_costs_ongoing + lifetime_maintenance_cost/number_of_years_in_service;
+
         end
 
         % YearlyGrossRevenue : Yearly gross revenue
-        function revenue = YearlyGrossRevenue()
+        function revenue = YearlyGrossRevenue(yearly_net_energy_output, electricity_rate)
+            
+            revenue = yearly_net_energy_output * electricity_rate;
+
         end
 
         % YearlyProfit : Yearly profit
-        function profit = YearlyProfit()
+        function profit = YearlyProfit(yearly_gross_revenue, yearly_cost)
+
+            profit = yearly_gross_revenue - yearly_cost;
+
         end
 
         % LifetimeCostNoInflation : Lifetime cost (no inflation)
-        function cost = LifetimeCostNoInflation()
+        function cost = LifetimeCostNoInflation(yearly_cost, number_of_years_in_service, capital_cost)
+
+            cost = yearly_cost * number_of_years_in_service + capital_cost;
+
         end
 
         % LifetimeProfitNoInflation : Lifetime profit (no inflation)
-        function profit = LifetimeProfitNoInflation()
+        function profit = LifetimeProfitNoInflation(yearly_profit, number_of_years_in_service)
+
+            profit = yearly_profit * number_of_years_in_service;
+
         end
 
         % AnnualCostOfUpfrontCapital : Annual cost of upfront capital
-        function c_ac = AnnualCostOfUpfrontCapital()
+        function c_ac = AnnualCostOfUpfrontCapital(capital_cost, number_of_years_in_service)
+
+            c_ac = capital_cost / number_of_years_in_service;
+
         end
 
         % AnnualCostOfOperationsAndMaintenance : Annual cost of op and main
-        function c_om = AnnualCostOfOperationsAndMaintenance()
+        function c_om = AnnualCostOfOperationsAndMaintenance(yearly_personnel_cost, yearly_regular_maintenance_cost)
+            
+            c_om = yearly_personnel_cost + yearly_regular_maintenance_cost;
+
         end
 
         % AnnualCostOfSchedulePartReplacements : Annual cost of replace
-        function c_scr = AnnualCostOfSchedulePartReplacements()
+        function c_scr = AnnualCostOfSchedulePartReplacements(lifetime_maintenance_cost, number_of_years_in_service, yearly_regular_maintenance_cost)
+
+            c_scr = lifetime_maintenance_cost/number_of_years_in_service - yearly_regular_maintenance_cost;
+
         end
 
         % AnnualCostOfFuel : Annual cost of fuel
-        function c_f = AnnualCostOfFuel()
+        function c_f = AnnualCostOfFuel(total_fuel_manufacturing_costs_ongoing)
+            
+            c_f = total_fuel_manufacturing_costs_ongoing;
+        
         end
 
         % CostOfDecomissioning : Cost to decomission plant
-        function c_dd = CostOfDecomissioning()
+        function c_dd = CostOfDecomissioning(decomissioning_cost, yearly_net_energy_output, number_of_years_in_service)
+
+            c_dd = (decomissioning_cost * 10^6) / (yearly_net_energy_output * number_of_years_in_service);
+
         end
 
         % LCOE : The levelized cost of electricity
         function lcoe = LCOE()
+
+            lcoe = ((c_ac+(c_om+c_scr+c_f)*(1+inflation_coefficient)^number_of_years_in_service)/(C2)+M12);
+
         end
 
         % TotalProjectCost : Time series data for project cost
@@ -176,9 +221,30 @@ classdef EconomicsModule < handle
         end
 
         % DirectConstructionCost : Direct cost of construction
-        function cost = DirectConstructionCost()
+        function cost = DirectConstructionCost(land_cost, reactor_building_cost, turbine_building_cost, cooling_tower_system_cost, power_supply_and_energy_storage_cost, venilation_stack_cost, miscellaneous_buildings_cost, laser_construction_cost)
 
-            cost = (land_cost+reactor_building_cost+Turbine Building Cost+Cooling Tower System Cost+Power Supply and Energy Storage Cost+Ventilation Stack Cost+Miscellaneous Buildings Cost+Laser Construction Cost)
+            cost = land_cost + reactor_building_cost + turbine_building_cost + cooling_tower_system_cost + power_supply_and_energy_storage_cost + venilation_stack_cost + miscellaneous_buildings_cost + laser_construction_cost;
+
+        end
+
+        % DecommissioningCost : Cost to decomission plant
+        function cost = DecommissioningCost(decommissioning_cost_coefficient, direct_construction_cost)
+
+            cost = decommissioning_cost_coefficient * direct_construction_cost;
+
+        end
+
+        % TotalCoolantCost : Total cost of coolant
+        function cost = TotalCoolantCost(coolant_volume, coolant_density, coolant_cost)
+
+            cost = coolant_volume * coolant_density * coolant_cost;
+
+        end
+
+        % HourlyPersonnelCost : Hourly cost of employees
+        function cost = HourlyPersonnelCost(number_of_staff, average_hourly_wage)
+
+            cost = number_of_staff * average_hourly_wage;
 
         end
 
