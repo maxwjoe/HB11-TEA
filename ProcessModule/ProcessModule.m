@@ -84,7 +84,7 @@ classdef ProcessModule < handle
         % LaserEnergyInput : Input energy to laser
         function in = LaserEnergyInput(laser_energy_output, laser_efficiency)
 
-            in = laser_energy_output * laser_efficiency;
+            in = laser_energy_output / laser_efficiency;
 
         end
 

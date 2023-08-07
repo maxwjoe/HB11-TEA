@@ -4,6 +4,8 @@
 PROC = ProcessModule();
 ECON = EconomicsModule();
 
+format longg
+
 % === Input Parameters ===
 
 % --- UI --- (TODO: APPEND IN)
@@ -117,12 +119,18 @@ yearly_regular_maintenance_cost = ECON.YearlyRegularMaintenanceCost(cost_of_main
 lifetime_maintenance_cost = ECON.LifetimeMaintenanceCost(IN_number_of_years_in_service, turbine_replacement_interval, turbine_generators_replacement_cost, diode_replacement_cost, laser_energy_input, diode_replacement_interval, IN_repetition_rate, lifetime_wall_replacement_cost, total_coolant_cost, coolant_replacement_interval, yearly_regular_maintenance_cost);
 
 
-% [Construction - Vacuum]
+% [Construction, Personnel, Vacuum]
 
+direct_construction_cost = ECON.DirectConstructionCost(land_cost, reactor_building_cost, turbine_building_cost, cooling_tower_system_cost, power_supply_and_energy_storage_cost, ventilation_stack_cost, miscellaneous_buildings_cost, laser_construction_cost);
+total_construction_cost = ECON.TotalConstructionCost(indirect_construction_cost, direct_construction_cost);
+decomissioning_cost = ECON.DecommissioningCost(decomissioning_cost_coefficient, direct_construction_cost);
 
+hourly_personnel_cost = ECON.HourlyPersonnelCost(IN_number_of_staff, average_hourly_wage);
+yearly_personnel_cost = ECON.YearlyPersonnelCost(hourly_personnel_cost);
 
+mass_of_vacuum_vessel = PROC.MassOfVacuumVessel(height_of_vacuum_vessel, radius_of_vacuum_vessel, wall_thickness_of_vacuum_vessel, density_of_vacuum_vessel_material);
+total_cost_of_vacuum_system = ECON.TotalCostOfVacuumSystem(mass_of_vacuum_vessel, shielding_material_costs_for_vacuum_vessel, IN_mass_flow_rate);
 
-% === Display Outputs ===
 
 
 
