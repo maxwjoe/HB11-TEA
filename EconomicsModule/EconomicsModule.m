@@ -11,36 +11,62 @@ classdef EconomicsModule < handle
     % === Static Public Methods ===
     methods (Static, Access = public)
 
+        % --- UI Visible ---
+
         % TotalCostPerTarget : Total cost per target
-        function cost = TotalCostPerTarget()
+        function cost = TotalCostPerTarget(total_cost_per_pellet, total_cost_per_target_with_x_factor, total_cost_per_capacitive_coil_and_hydrogen_cone, final_assembly_cost_per_target)
+        
+            cost = total_cost_per_pellet + total_cost_per_target_with_x_factor + total_cost_per_capacitive_coil_and_hydrogen_cone + final_assembly_cost_per_target;
+        
         end
 
         % TotalFuelManufacturingCostsUpfront : Upfront fuel man costs
-        function cost = TotalFuelManufacturingCostsUpfront()
+        function cost = TotalFuelManufacturingCostsUpfront(total_cost_of_fuel_development, total_cost_of_manufacturing_facilities)
+
+            cost = total_cost_of_fuel_development + total_cost_of_manufacturing_facilities;
+
         end
 
         % TotalFuelManufacturingCostsOngoing : Ongoing fuel man costs
-        function cost = TotalFuelManufacturingCostsOngoing()
+        function cost = TotalFuelManufacturingCostsOngoing(manufacturing_overhead_costs, fuel_target_production_per_year, total_cost_per_target)
+
+            cost = manufacturing_overhead_costs+fuel_target_production_per_year*(total_cost_per_target);
+
         end
 
         % TotalCostOfFuelDeliveryAndStorage : Costs for fuel delivery/store
-        function cost = TotalCostOfFuelDeliveryAndStorage()
+        function cost = TotalCostOfFuelDeliveryAndStorage(total_cost_of_fuel_storage, cost_of_fuel_delivery_robot)
+
+            cost = total_cost_of_fuel_storage + cost_of_fuel_delivery_robot;
+
         end
 
         % LifetimeMaintenanceCost : Cost of maintenance (lifetime)
-        function cost = LifetimeMaintenanceCost()
+        function cost = LifetimeMaintenanceCost(number_of_years_in_service, turbine_replacement_interval, turbine_generator_replacement_cost, diode_replacement_cost, laser_energy_input, diode_replacement_interval, repetition_rate, lifetime_wall_replacement_cost, total_coolant_cost, coolant_replacement_interval, yearly_regular_maintenance_cost)
+            
+            cost = floor(number_of_years_in_service/turbine_replacement_interval)*turbine_generator_replacement_cost + diode_replacement_cost * (laser_energy_input / 3600) * repetition_rate * floor(number_of_years_in_service / diode_replacement_interval) + lifetime_wall_replacement_cost + total_coolant_cost * (number_of_years_in_service / coolant_replacement_interval) + yearly_regular_maintenance_cost * number_of_years_in_service; 
+
         end
 
         % TotalConstructionCost : Total cost of construction
-        function cost = TotalConstructionCost()
+        function cost = TotalConstructionCost(indirect_construction_cost, direct_construction_cost)
+            
+            cost = indirect_construction_cost + direct_construction_cost;
+
         end
 
         % YearlyPersonnelCost : Cost of personnel for a year
-        function cost = YearlyPersonnelCost()
+        function cost = YearlyPersonnelCost(hourly_personnel_cost)
+
+            cost = hourly_personnel_cost*7.6*7*52.18;
+
         end
 
         % TotalCostOfVacuumSystem : Total cost for vacuum system
-        function cost = TotalCostOfVacuumSystem()
+        function cost = TotalCostOfVacuumSystem(mass_of_vacuum_vessel, shielding_material_costs_for_vacuum_vessel, mass_flow_rate)
+
+            cost = 90.69 * mass_of_vacuum_vessel + shielding_material_costs_for_vacuum_vessel + 13.04 * mass_flow_rate * 112.32;
+
         end
 
         % Capital Cost : Captial costs
@@ -106,11 +132,87 @@ classdef EconomicsModule < handle
         % ProjectedLifetimeNetRevenueWithInflation : Net revenue
         function revenue = ProjectedLifetimeNetRevenueWithInflation()
         end
-  
-    end
 
-    % === Static Private Methods ===
-    methods (Static, Access = private)
+        % --- Not in UI ---
+
+        % LaserEquipmentCost : cost of laser equipment
+        function cost = LaserEquipmentCost(net_energy_output)
+
+            cost = (1400*net_energy_output*1000)/(10^6);
+
+        end
+
+        % TotalReactorEnergyConsumptionCost : Cost of running reactor
+        function cost = TotalReactorEnergyConsumptionCost(total_reactor_energy_consumption, electricity_rate)
+
+            cost = total_reactor_energy_consumption * electricity_rate;
+
+        end
+
+        % TotalCostPerPellet : Total cost per fuel pellet
+        function cost = TotalCostPerPellet(fuel_pellet_mass, fuel_pellet_percentage_boron_nitride, cost_of_boron_nitride, cost_of_manufacturing_per_pellet)
+            
+            cost = fuel_pellet_mass*(fuel_pellet_percentage_boron_nitride*cost_of_boron_nitride)/(1000)+cost_of_manufacturing_per_pellet; 
+
+        end
+
+        % TotalCostPerTargetWithXFactor : Total target cost with x factor
+        function cost = TotalCostPerTargetWithXFactor(x_factor, total_cost_of_x_factor)
+
+            cost = x_factor * total_cost_of_x_factor;
+            
+        end
+
+        % TotalCostPerCapacitiveCoilAndHydrogenCone : Total cost
+        function cost = TotalCostPerCapacitiveCoilAndHydrogenCone(capacitive_coil_and_hydrogen_cone, total_material_cost_per_capacitive_coil_and_hydrogen_cone, cost_of_manufacturing_per_capacitive_coil_and_hydrogen_cone)
+
+            cost = capacitive_coil_and_hydrogen_cone*(total_material_cost_per_capacitive_coil_and_hydrogen_cone+cost_of_manufacturing_per_capacitive_coil_and_hydrogen_cone);
+
+        end
+
+        % TotalMaterialCostPerCapacitiveCoilAndHydrogenCone : Cost
+        function cost = TotalMaterialCostPerCapacitiveCoilAndHydrogenCone(hydrogen_precursor_mass, cost_of_hydrogen)
+
+            cost = 0.04+(hydrogen_precursor_mass*cost_of_hydrogen)/(1000);
+
+        end
+
+        % YearlyRegularMaintenanceCost : Cost of yearly maintenance
+        function cost = YearlyRegularMaintenanceCost(cost_of_maintenance_per_kwh, yearly_net_energy_output)
+            
+            cost = cost_of_maintenance_per_kwh*1000*yearly_net_energy_output;
+
+        end
+
+        % DirectConstructionCost : Direct cost of construction
+        function cost = DirectConstructionCost(land_cost, reactor_building_cost, turbine_building_cost, cooling_tower_system_cost, power_supply_and_energy_storage_cost, venilation_stack_cost, miscellaneous_buildings_cost, laser_construction_cost)
+
+            cost = land_cost + reactor_building_cost + turbine_building_cost + cooling_tower_system_cost + power_supply_and_energy_storage_cost + venilation_stack_cost + miscellaneous_buildings_cost + laser_construction_cost;
+
+        end
+
+        % DecommissioningCost : Cost to decomission plant
+        function cost = DecommissioningCost(decommissioning_cost_coefficient, direct_construction_cost)
+
+            cost = decommissioning_cost_coefficient * direct_construction_cost;
+
+        end
+
+        % TotalCoolantCost : Total cost of coolant
+        function cost = TotalCoolantCost(coolant_volume, coolant_density, coolant_cost)
+
+            cost = coolant_volume * coolant_density * coolant_cost;
+
+        end
+
+        % HourlyPersonnelCost : Hourly cost of employees
+        function cost = HourlyPersonnelCost(number_of_staff, average_hourly_wage)
+
+            cost = number_of_staff * average_hourly_wage;
+
+        end
+
+
     end
 
     % === Private Properties ===

@@ -75,11 +75,7 @@ coolant_pipe_outlet_radius = 0.39;
 average_hourly_wage = 55;
 shielding_material_costs_for_vacuum_vessel = 0;
 radius_of_vacuum_vessel = 10;
-height_of_vacuum_vessel = 15;
-wall_thickness_of_vacuum_vessel = 0.01;
-density_of_vacuum_vessel_material = 8000;
-vacuum_system_power_usage = 0.13;
-
+height_of_vacuum_v
 
 
 
